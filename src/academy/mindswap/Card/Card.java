@@ -10,13 +10,8 @@ public class Card {
 		cardSuit = suit;
 	}
 
-	public int getValue() {
-	}
 	@Override
 	public String toString() {
-		return "Card{" +
-				"cardValue=" + cardValue +
-				", cardSuit=" + cardSuit +
-				'}';
+		return  cardValue + " of " + cardSuit;
 	}
 }

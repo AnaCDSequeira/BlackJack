@@ -7,11 +7,9 @@ public enum CardSuit {
 	HEARTS,
 	CLUBS;
 
-
-		@Override
-		public String toString () {
-			return name().toLowerCase();
-		}
-
-
+	@Override
+	public String toString() {
+		return name().toLowerCase();
 	}
+
+}
