@@ -9,14 +9,9 @@ public class Card {
 		cardValue = value;
 		cardSuit = suit;
 	}
-
-	public int getValue() {
-	}
-	@Override
-	public String toString() {
-		return "Card{" +
-				"cardValue=" + cardValue +
-				", cardSuit=" + cardSuit +
-				'}';
-	}
+//
+//	@Override
+//	public String toString() {
+//		return  cardValue + " of " + cardSuit;
+//	}
 }

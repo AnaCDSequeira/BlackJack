@@ -7,10 +7,10 @@ public class Deck {
 	private ArrayList<Card> deck;
 
 	public Deck() {
+		this.deck = new ArrayList<>();
 	}
 
 	public void populate() {
-		deck = new ArrayList<>();
 		for (int i = 0; i < CardSuit.values().length; i++) {
 			for (int j = 0; j < CardValue.values().length; j++) {
 				deck.add(new Card(CardValue.values()[j], CardSuit.values()[i]));

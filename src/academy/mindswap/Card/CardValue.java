@@ -1,7 +1,5 @@
 package academy.mindswap.Card;
 
-import java.util.Arrays;
-
 public enum CardValue {
 
 	ACE(1),
@@ -24,12 +22,10 @@ public enum CardValue {
 	CardValue(int value) {
 		this.value = value;
 	}
-	
+
 
 	@Override
 	public String toString() {
-		return "Value" +
-				"value=" + value +
-				'.';
+		return name().toLowerCase();
 	}
 }
