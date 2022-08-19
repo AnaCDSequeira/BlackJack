@@ -1,48 +1,31 @@
 package BlackJack;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class Card {
 
-    private Suit mySuit;
-    private int myNumber;
-    private String[] cardArray = {"Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King","Ace"};
+    private static String[] cardArray = {"Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King","Ace"};
+    private static String[] suitArray = {"Clubs","Diamonds", "Spades", "Hearts"};
+    private static ArrayList<String> oneDeck;
 
-    public Card(Suit aSuit, int aNumber){
-        this.mySuit= aSuit;
-        this.myNumber= aNumber;
+    public static ArrayList<String> deckOf52() {
+        oneDeck = new ArrayList<>();
+            for (int i = 0; i < suitArray.length; i++) {
+                for (int j = 0; j < cardArray.length; j++) {
+                    oneDeck.add(cardArray[j] + " of " + suitArray[i]);
+                }
+            }
+        return oneDeck;
     }
 
-    public int getMyNumber(){
-        return myNumber;
+    public void printCards() {
+        for (String v : oneDeck) {
+            System.out.println(v);
+        }
     }
 
-
-
-    @Override
-    public String toString(){
-
-        return myNumber + " of " + mySuit.toString();
-    }
-    public enum Suit {
-
-        Clubs,
-        Diamonds,
-        Spades,
-        Hearts
-    }
-
-    public enum Value{
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Ten,
-        Jack,
-        Queen,
-        King,
-        Ace
+    public static ArrayList<String> getOneDeck() {
+        return oneDeck;
     }
 }

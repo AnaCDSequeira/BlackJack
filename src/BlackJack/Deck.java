@@ -5,34 +5,29 @@ import java.util.Collections;
 
 public class Deck {
 
-    private String[] cardArray = {"Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King","Ace"};
-    private String[] suitArray = {"Clubs","Diamonds", "Spades", "Hearts"};
-    private ArrayList<String> result;
+    private ArrayList<String> shoe;
     private int numberOfDecks;
 
 
 
     public ArrayList<String> storeCards() {
-        int counter = 0;
-        result = new ArrayList<>();
+        shoe = new ArrayList<String>(Card.deckOf52());
+        int counter = 1;
         while (counter != numberOfDecks) {
-
-            for (int i = 0; i < suitArray.length; i++) {
-                for (int j = 0; j < cardArray.length; j++) {
-                    result.add(cardArray[j] + " of " + suitArray[i]);
-                }
+            for (String v: Card.getOneDeck()){
+                shoe.add(v);
             }
             counter++;
         }
-        Collections.shuffle(result);
-        return result;
+        Collections.shuffle(shoe);
+        return shoe;
     }
-
     public void printCards() {
-        for (String v : result) {
+        for (String v : shoe) {
             System.out.println(v);
         }
     }
+
 
 
 
