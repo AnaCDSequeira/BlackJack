@@ -18,22 +18,23 @@ public class DealerShoe {
 		return shoe;
 	}
 
+	public Card askForCard() {
+		return drawCardFromTop();
+	}
+
 	private void shuffleCards() {
 		Collections.shuffle(shoe);
 	}
 
-	private void dealCard() {
-		lastCard();
-		removeCard();
-	}
-
-	private Card lastCard() {
+	private Card drawCardFromTop() {
 		int lastCardPosition = getLastCardPosition();
-		return shoe.get(lastCardPosition);
+		Card card = shoe.get(lastCardPosition);
+		removeCard(card);
+		return card;
 	}
 
-	private void removeCard() {
-		shoe.remove(lastCard());
+	private void removeCard(Card card) {
+		shoe.remove(card);
 	}
 
 	private int getLastCardPosition() {

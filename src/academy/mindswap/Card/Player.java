@@ -1,34 +1,58 @@
 package academy.mindswap.Card;
 
-import java.util.ArrayList;
+public class Player {
 
-public abstract class Player { //dealer e client ou interface funcional?
-
-	private ArrayList<Card> hand;
+	private Hand hand;
 
 	private String name;
 
-	private int score;
-	private int amountToBet;
+	private int bet;
 
-	private boolean willPlay = false;
+	private double moneyAvailable;
 
-	public Player(String name, int amountToBet) {
+	public Player(String name, double moneyAvailable) {
+		this.hand = new Hand();
 		this.name = name;
-		this.amountToBet = amountToBet;
-		this.hand = new ArrayList<>();
+		this.moneyAvailable = moneyAvailable;
 	}
 
-	public void dealCards(Card card) {
-		hand.add(card);
-		updateScore();
+	public void addCard(Card card) {
+		hand.addCard(card);
 	}
 
-	private void updateScore() {
-		for (Card card : hand) {
-			score += card.getValue().getValue();
-		}
+	public boolean wantsToPlay() {
+		return true; // TODO(ask player)
 	}
 
+	public boolean canPlay() {
+		// TODO: Verify minimum bet amount (table should define it)
+		return hand.canPlay();
+	}
 
+	public void askForBet() {
+		// TODO: Ask for bet
+		bet = 100;
+		moneyAvailable -= bet;
+	}
+
+	public boolean hasBlackJack() {
+		return hand.hasBlackJack();
+	}
+
+	public int getScore() {
+		return hand.getScore();
+	}
+
+	public void getPayment(double betMultiplier) {
+		moneyAvailable += bet * betMultiplier;
+		resetBet();
+	}
+
+	private void resetBet() {
+		bet = 0;
+	}
+
+	public int getBet() {
+		return bet;
+	}
 }

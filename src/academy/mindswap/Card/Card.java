@@ -15,7 +15,7 @@ public class Card {
 		return  cardValue + " of " + cardSuit;
 	}
 
-	public CardValue getValue() {
-		return cardValue;
+	public int getValue() {
+		return cardValue.getValue();
 	}
 }
