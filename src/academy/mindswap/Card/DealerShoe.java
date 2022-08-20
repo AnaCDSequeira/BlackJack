@@ -22,9 +22,18 @@ public class DealerShoe {
 		Collections.shuffle(shoe);
 	}
 
+	private void dealCard() {
+		lastCard();
+		removeCard();
+	}
+
 	private Card lastCard() {
 		int lastCardPosition = getLastCardPosition();
 		return shoe.get(lastCardPosition);
+	}
+
+	private void removeCard() {
+		shoe.remove(lastCard());
 	}
 
 	private int getLastCardPosition() {

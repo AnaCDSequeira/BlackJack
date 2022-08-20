@@ -28,4 +28,8 @@ public enum CardValue {
 	public String toString() {
 		return name().toLowerCase();
 	}
+
+	public int getValue() {
+		return value;
+	}
 }
