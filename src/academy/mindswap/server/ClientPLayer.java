@@ -46,4 +46,13 @@ public class ClientPLayer {
             handleServer();
         }
     }
+    private void communicateWithServer() {
+        try {
+            sendMessageToServer();
+            communicateWithServer();
+        } catch (IOException e) {
+            System.out.println("The Casino is closed now");
+            handleServer();
+        }
+    }
 }
