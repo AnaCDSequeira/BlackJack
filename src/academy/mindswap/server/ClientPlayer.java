@@ -4,7 +4,7 @@ package academy.mindswap.server;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientPLayer {
+public class ClientPlayer {
 
     private Socket socket;
     private PrintWriter writer;
@@ -13,7 +13,7 @@ public class ClientPLayer {
     private final int PORT = 1234;
 
     public static void main(String[] args) {
-        ClientPLayer client = new ClientPLayer();
+        ClientPlayer client = new ClientPlayer();
         client.startConsoleReader();
         client.handleServer();
     }
