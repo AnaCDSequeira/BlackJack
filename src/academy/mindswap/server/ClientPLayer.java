@@ -91,7 +91,10 @@ public class ClientPLayer {
 
         @Override
         public void run() {
-
+            try {
+                readMessage();
+            } catch (IOException e) {
+            }
         }
     }
 }
