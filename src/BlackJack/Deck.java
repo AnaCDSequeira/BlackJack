@@ -10,7 +10,7 @@ public class Deck {
 
 
 
-    public ArrayList<String> storeCards() {
+    /*public ArrayList<String> storeCards() {
         shoe = new ArrayList<String>(Card.deckOf52());
         int counter = 1;
         while (counter != numberOfDecks) {
@@ -34,4 +34,6 @@ public class Deck {
     public void setNumberOfDecks(int numberOfDecks) {
         this.numberOfDecks = numberOfDecks;
     }
+    */
+
 }
