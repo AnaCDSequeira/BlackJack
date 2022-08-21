@@ -1,6 +1,8 @@
 package academy.mindswap.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -43,6 +45,12 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
+
+        private Socket socket;
+        private PrintWriter writer;
+        private BufferedReader reader;
+
+
         @Override
         public void run() {
 
