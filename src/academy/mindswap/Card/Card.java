@@ -9,9 +9,13 @@ public class Card {
 		cardValue = value;
 		cardSuit = suit;
 	}
-//
-//	@Override
-//	public String toString() {
-//		return  cardValue + " of " + cardSuit;
-//	}
+
+	@Override
+	public String toString() {
+		return  cardValue + " of " + cardSuit;
+	}
+
+	public int getValue() {
+		return cardValue.getValue();
+	}
 }

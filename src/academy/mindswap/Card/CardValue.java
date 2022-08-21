@@ -1,7 +1,6 @@
 package academy.mindswap.Card;
 
 public enum CardValue {
-
 	ACE(1),
 	TWO(2),
 	THREE(3),
@@ -16,16 +15,18 @@ public enum CardValue {
 	QUEEN(10),
 	KING(10);
 
-	private int value;
-
+	private final int value;
 
 	CardValue(int value) {
 		this.value = value;
 	}
 
-
 	@Override
 	public String toString() {
 		return name().toLowerCase();
+	}
+
+	public int getValue() {
+		return value;
 	}
 }

@@ -1,22 +1,43 @@
 package academy.mindswap.Card;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DealerShoe {
 
-	private final ArrayList<Deck> shoe = new ArrayList<>();
+	private static final int NUMBER_OF_DECKS = 6;
 
-	private final int numberOfDecks = 6;
+	private final ArrayList<Card> shoe = new ArrayList<>();
 
-	public ArrayList<Deck> populatedShoe() {
-		for (int i = 0; i < numberOfDecks; i++) {
-			shoe.add(new Deck());
+	public ArrayList<Card> populateShoe() {
+		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
+			Deck deck = new Deck();
+			shoe.addAll(deck.getCards());
 		}
+		shuffleCards();
 		return shoe;
 	}
 
+	public Card askForCard() {
+		return drawCardFromTop();
+	}
 
-	private int lastCard() {
+	private void shuffleCards() {
+		Collections.shuffle(shoe);
+	}
+
+	private Card drawCardFromTop() {
+		int lastCardPosition = getLastCardPosition();
+		Card card = shoe.get(lastCardPosition);
+		removeCard(card);
+		return card;
+	}
+
+	private void removeCard(Card card) {
+		shoe.remove(card);
+	}
+
+	private int getLastCardPosition() {
 		return shoe.size() - 1;
 	}
 }
