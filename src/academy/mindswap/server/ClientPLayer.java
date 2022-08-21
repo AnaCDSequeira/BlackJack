@@ -10,4 +10,6 @@ public class ClientPLayer {
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
+    private final String HOST = "localhost";
+    private final int PORT = 1234;
 }
