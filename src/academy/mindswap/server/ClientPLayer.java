@@ -59,4 +59,14 @@ public class ClientPLayer {
         String message = readMessageFromServer();
         writer.println(message);
     }
+    private String readMessageFromServer() {
+        String message = null;
+        try {
+            message = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return message;
+    }
 }
