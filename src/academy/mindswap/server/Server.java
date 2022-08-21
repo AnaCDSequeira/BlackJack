@@ -2,6 +2,7 @@ package academy.mindswap.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
@@ -19,5 +20,19 @@ public class Server {
             System.exit(1);
         }
         System.out.println("BlackJack is open and accepting players");
+    }
+
+    private void acceptClient() {
+        Socket socket;
+        try {
+            socket = serverSocket.accept();///
+            ClientHandler clientHandler = new ClientHandler(socket);
+            clientHandlerList.add(clientHandler);
+            new Thread(clientHandler).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            acceptClient();
+        }
     }
 }
