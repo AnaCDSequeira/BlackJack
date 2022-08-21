@@ -69,4 +69,13 @@ public class ClientPLayer {
         }
         return message;
     }
+    private void close() {
+        try {
+            socket.close();
+            System.out.println("The Casino is closed now");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 }
