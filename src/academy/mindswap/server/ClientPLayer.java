@@ -2,6 +2,7 @@ package academy.mindswap.server;
 
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -28,5 +29,14 @@ public class ClientPLayer {
         listenToServer();
         communicateWithServer();
         close();
+    }
+    private void connectToServer() {
+        try {
+            this.socket = new Socket(HOST, PORT);
+            this.writer = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            System.out.println("The Casino is closed now");
+            connectToServer();
+        }
     }
 }
