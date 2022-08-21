@@ -17,4 +17,10 @@ public class ClientPLayer {
     private void startConsoleReader() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
+    private void handleServer() {
+        connectToServer();
+        listenToServer();
+        communicateWithServer();
+        close();
+    }
 }
