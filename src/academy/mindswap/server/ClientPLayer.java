@@ -14,6 +14,12 @@ public class ClientPLayer {
     private final String HOST = "localhost";
     private final int PORT = 1234;
 
+    public static void main(String[] args) {
+        ClientPLayer client = new ClientPLayer();
+        client.startConsoleReader();
+        client.handleServer();
+    }
+
     private void startConsoleReader() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
