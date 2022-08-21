@@ -39,4 +39,11 @@ public class ClientPLayer {
             connectToServer();
         }
     }
+    private void listenToServer() {
+        try {
+            new Thread(new ServerHandler(socket.getInputStream())).start();
+        } catch (IOException e) {
+            handleServer();
+        }
+    }
 }
