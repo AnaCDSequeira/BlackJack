@@ -63,6 +63,7 @@ public class Server {
         private void sendMessageToUser(String message) {
             writer.println(message);
         }
+
         private void readMessageFromUser() {
             try {
                 String line = reader.readLine();
@@ -73,6 +74,11 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private void welcomeClient() throws IOException {
+            System.out.println("New player arrived, waiting for other players");
+            sendMessageToUser("Welcome to BlackJack");
         }
 
         @Override
