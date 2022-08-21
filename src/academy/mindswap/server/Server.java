@@ -83,7 +83,15 @@ public class Server {
 
         @Override
         public void run() {
-
+            try {
+                startIOCommunication();
+                welcomeClient();
+            } catch (IOException e) {
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
-}
