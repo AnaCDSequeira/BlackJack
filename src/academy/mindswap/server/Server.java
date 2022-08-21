@@ -63,6 +63,17 @@ public class Server {
         private void sendMessageToUser(String message) {
             writer.println(message);
         }
+        private void readMessageFromUser() {
+            try {
+                String line = reader.readLine();
+                if (line == null) {
+                    socket.close();
+                    return;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         @Override
         public void run() {
