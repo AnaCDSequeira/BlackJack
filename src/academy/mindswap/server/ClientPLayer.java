@@ -83,6 +83,12 @@ public class ClientPLayer {
             this.serverReader = new BufferedReader(new InputStreamReader(inputStream));
         }
 
+        private void readMessage() throws IOException {
+            String readMessageFromServer = serverReader.readLine();
+            System.out.println(readMessageFromServer);
+            readMessage();
+        }
+
         @Override
         public void run() {
 
