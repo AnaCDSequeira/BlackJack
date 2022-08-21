@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
 
@@ -50,6 +51,9 @@ public class Server {
         private PrintWriter writer;
         private BufferedReader reader;
 
+        public ClientHandler(Socket socket) {
+            this.socket = socket;
+        }
 
         @Override
         public void run() {
