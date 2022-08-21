@@ -11,6 +11,12 @@ public class Server {
     private static final int PORT = 1234;
     private List<ClientHandler> clientHandlerList;
 
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.startServer(PORT);
+        server.acceptClient();
+    }
+
     private void startServer(int port) {
         try {
             serverSocket = new ServerSocket(port);
