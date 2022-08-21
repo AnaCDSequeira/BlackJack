@@ -2,6 +2,7 @@ package academy.mindswap.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -53,6 +54,11 @@ public class Server {
 
         public ClientHandler(Socket socket) {
             this.socket = socket;
+        }
+
+        private void startIOCommunication() throws IOException {
+            writer = new PrintWriter(socket.getOutputStream(),true);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
 
         @Override
