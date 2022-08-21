@@ -79,6 +79,9 @@ public class ClientPLayer {
         }
     }
     private class ServerHandler implements Runnable {
+
+        BufferedReader serverReader;
+
         @Override
         public void run() {
 
