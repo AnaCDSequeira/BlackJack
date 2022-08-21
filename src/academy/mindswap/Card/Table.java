@@ -10,11 +10,13 @@ public class Table {
 
 	private static final double SIMPLE_WIN_MULTIPLIER = 2;
 
-	private ArrayList<Player> players;
+	private final ArrayList<Player> players;
 
-	private Dealer dealer;
+	private final Dealer dealer;
 
-	private DealerShoe dealerShoe;
+	private final DealerShoe dealerShoe;
+
+	private boolean askedForCard; //TODO: associar o HIT
 
 	public Table(ArrayList<Player> players, Dealer dealer, DealerShoe dealerShoe) {
 		this.players = players;
@@ -25,20 +27,51 @@ public class Table {
 
 	private void startGame() {
 		dealerShoe.populateShoe();
-		askForBets(players);
-		dealFirstRound();
-		dealCardsToPlayers();
-		dealCardsToDealer();
-		payToWinners();
+		playBlackJack();
 	}
 
-	private void payToWinners() {
+	private void playBlackJack() {
+		askForBets(players);
+		dealFirstRound();
+		roundCheck();
+		while (players.size() > 0) {
+			playRound();
+		}
+	}
+
+	private void playRound() {
+		for (Player player : players) {
+			while (player.wantMoreCards()) {
+				dealCardTo(player);
+				checkPlayer(player);
+			}
+		}
+		while (dealer.canPlay()) {
+			dealCardTo(dealer);
+		}
+		roundCheck();
+	}
+
+	private void roundCheck() {
+		for (Player player : players) {
+			checkPlayer(player);
+		}
+	}
+
+	private void checkPlayer(Player player) {
+		if (player.hasBlackJack() || player.hasBusted()) {
+			dealWithBets();
+			players.remove(player);
+		}
+	}
+
+	private void dealWithBets() {
 		int dealerScore = dealer.getScore();
 		for (Player player : players) {
 			double betMultiplier;
 			if (player.hasBlackJack()) {
 				betMultiplier = BLACKJACK_MULTIPLIER;
-			} else if (player.getScore() > dealerScore) {
+			} else if (player.getScore() > dealerScore || dealer.hasBusted()) {
 				betMultiplier = SIMPLE_WIN_MULTIPLIER;
 			} else {
 				betMultiplier = 0;
@@ -66,29 +99,9 @@ public class Table {
 		}
 	}
 
-	private void dealCardTo(Player player) {
+	private void dealCardTo(Person person) {
 		Card card = dealerShoe.askForCard();
-		player.addCard(card);
-	}
-
-	private void dealCardTo(Dealer dealer) {
-		Card card = dealerShoe.askForCard();
-		dealer.addCard(card);
-	}
-
-	private void dealCardsToPlayers() {
-		for (Player player : players) {
-			while (player.canPlay() && player.wantsToPlay()) {
-				dealCardTo(player);
-			}
-		}
-	}
-
-	private void dealCardsToDealer() {
-		while (dealer.canPlay()) {
-			Card card = dealerShoe.askForCard();
-			dealer.addCard(card);
-		}
+		person.addCard(card);
 	}
 
 }

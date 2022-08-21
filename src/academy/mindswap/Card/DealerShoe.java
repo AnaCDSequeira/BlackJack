@@ -9,13 +9,12 @@ public class DealerShoe {
 
 	private final ArrayList<Card> shoe = new ArrayList<>();
 
-	public ArrayList<Card> populateShoe() {
+	public void populateShoe() {
 		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
 			Deck deck = new Deck();
 			shoe.addAll(deck.getCards());
 		}
 		shuffleCards();
-		return shoe;
 	}
 
 	public Card askForCard() {

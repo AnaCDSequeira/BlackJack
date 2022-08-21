@@ -1,7 +1,6 @@
 package academy.mindswap.Card;
 
 public enum CardSuit {
-
 	DIAMONDS,
 	SPADES,
 	HEARTS,
