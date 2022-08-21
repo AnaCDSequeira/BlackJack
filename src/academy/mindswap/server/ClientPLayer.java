@@ -78,4 +78,10 @@ public class ClientPLayer {
             System.exit(1);
         }
     }
+    private class ServerHandler implements Runnable {
+        @Override
+        public void run() {
+
+        }
+    }
 }
