@@ -41,4 +41,11 @@ public class Server {
             acceptClient();
         }
     }
+
+    private class ClientHandler implements Runnable {
+        @Override
+        public void run() {
+
+        }
+    }
 }
