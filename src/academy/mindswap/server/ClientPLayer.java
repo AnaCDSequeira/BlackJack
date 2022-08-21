@@ -1,10 +1,7 @@
 package academy.mindswap.server;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class ClientPLayer {
@@ -81,6 +78,10 @@ public class ClientPLayer {
     private class ServerHandler implements Runnable {
 
         BufferedReader serverReader;
+
+        public ServerHandler(InputStream inputStream) {
+            this.serverReader = new BufferedReader(new InputStreamReader(inputStream));
+        }
 
         @Override
         public void run() {
