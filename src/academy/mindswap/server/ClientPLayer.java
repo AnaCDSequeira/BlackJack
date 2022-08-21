@@ -55,4 +55,8 @@ public class ClientPLayer {
             handleServer();
         }
     }
+    private void sendMessageToServer() throws IOException {
+        String message = readMessageFromServer();
+        writer.println(message);
+    }
 }
