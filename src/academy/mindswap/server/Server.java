@@ -60,6 +60,9 @@ public class Server {
             writer = new PrintWriter(socket.getOutputStream(),true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
+        private void sendMessageToUser(String message) {
+            writer.println(message);
+        }
 
         @Override
         public void run() {
