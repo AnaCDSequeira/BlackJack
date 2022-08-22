@@ -23,7 +23,7 @@ public class Hand {
 
 	public void addCard(Card card) {
 		cards.add(card);
-		updateScore(card.getValue());
+		updateScore(Integer.parseInt(card.getValue()));
 	}
 
 	private void updateScore(int value) {

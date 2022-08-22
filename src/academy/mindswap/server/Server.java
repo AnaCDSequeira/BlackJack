@@ -1,13 +1,11 @@
 package academy.mindswap.server;
 
+import academy.mindswap.game.Card;
 import academy.mindswap.game.Hand;
 import academy.mindswap.game.Person;
 import academy.mindswap.game.Table;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.List;
 public class Server {
 
     private ServerSocket serverSocket;
-    private static final int PORT = 1234;
+    private static final int PORT = 1010;
     private ArrayList<ClientHandler> clientHandlerList;
 
     public static void main(String[] args) {
@@ -38,32 +36,34 @@ public class Server {
 
     private void acceptClient() {
         Socket socket;
-        try {
-            socket = serverSocket.accept();///
 
-            ClientHandler clientHandler = new ClientHandler(socket);
-            clientHandlerList.add(clientHandler);
-            new Thread(clientHandler).start();
+        try {
+            while (clientHandlerList.size() < 2) {
+                socket = serverSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(socket);
+                clientHandlerList.add(clientHandler);
+                new Thread(clientHandler).start();
+            }
+
             Table table = new Table(clientHandlerList);
             table.startGame();
+
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            acceptClient();
         }
+            acceptClient();
     }
 
 
     public class ClientHandler extends Person implements Runnable {
 
         private Socket socket;
-        private PrintWriter writer;
+        private BufferedWriter writer;
         private BufferedReader reader;
 
         private String username;
         private int score;
         private int budget;
-
         private int bet;
         private Hand hand;
 
@@ -73,16 +73,23 @@ public class Server {
 
 
         private void startIOCommunication() throws IOException {
-            writer = new PrintWriter(socket.getOutputStream(), true);
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
 
         private void sendMessageToUser(String message) {
-            writer.println(message);
+
+            try {
+                writer.write(message);
+                writer.newLine();
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         private String readMessageFromUser() {
-            String line = "";
+            String line = "" ;
             try {
                 line = reader.readLine();
                 if (line == null) {
@@ -94,7 +101,7 @@ public class Server {
             return line;
         }
 
-        private void welcomeClient() throws IOException {
+        public void welcomeClient() throws IOException {
             System.out.println(Messages.PLAYER_CONNECTED);
             sendMessageToUser(Messages.WELCOME_PLAYER);
         }
@@ -121,6 +128,7 @@ public class Server {
             sendMessageToUser(message);
             return readMessageFromUser();
         }
+
         public boolean wantMoreCards() {
             return true; // TODO(ask player)
         }
@@ -131,8 +139,12 @@ public class Server {
         }
 
         public void askForBet() {
-            // TODO: Ask for bet
-            bet = 100;
+            bet = Integer.parseInt(sendMessageAndReadAnswer("How much do you want to bet ?"));
+            //TODO create enum for chips
+            if (budget < bet) {
+                sendMessageToUser("There's not enough money to bet. You have: " + budget);
+                askForBet();
+            }
             budget -= bet;
         }
 
@@ -155,6 +167,10 @@ public class Server {
 
         private void resetBet() {
             bet = 0;
+        }
+        public void addCard(Card card) {
+            hand.addCard(card);
+            sendMessageToUser(card.getValue());
         }
 
         @Override
