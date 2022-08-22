@@ -1,4 +1,4 @@
-package BlackJack.game.commands;
+package academy.mindswap.visualEfect.commands;
 
 public enum Bets {
 /*

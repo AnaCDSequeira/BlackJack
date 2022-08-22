@@ -1,4 +1,4 @@
-import BlackJack.Card;
+package academy.mindswap.visualEfect;
 
 import java.util.ArrayList;
 import java.util.Arrays;

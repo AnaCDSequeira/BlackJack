@@ -1,6 +1,4 @@
-import BlackJack.Card;
-import BlackJack.Deck;
-import BlackJack.game.Game;
+package academy.mindswap.visualEfect;
 
 import java.io.IOException;
 

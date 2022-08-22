@@ -1,3 +1,5 @@
+package academy.mindswap.visualEfect;
+
 public class Mensagens {
 
 

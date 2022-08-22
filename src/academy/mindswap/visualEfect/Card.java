@@ -1,4 +1,4 @@
-package BlackJack;
+package academy.mindswap.visualEfect;
 
 import java.util.ArrayList;
 

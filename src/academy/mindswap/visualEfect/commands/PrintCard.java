@@ -1,4 +1,4 @@
-package BlackJack.game.commands;
+package academy.mindswap.visualEfect.commands;
 
 import java.io.File;
 import java.io.IOException;
