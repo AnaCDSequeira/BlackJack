@@ -29,13 +29,14 @@ public class Server {
             e.printStackTrace();
             System.exit(1);
         }
-        System.out.println("BlackJack is open and accepting players");
+        System.out.println(Messages.OPEN_SERVER);
     }
 
     private void acceptClient() {
         Socket socket;
         try {
             socket = serverSocket.accept();///
+
             ClientHandler clientHandler = new ClientHandler(socket);
             clientHandlerList.add(clientHandler);
             new Thread(clientHandler).start();
@@ -46,39 +47,70 @@ public class Server {
         }
     }
 
+
     private class ClientHandler implements Runnable {
 
         private Socket socket;
         private PrintWriter writer;
         private BufferedReader reader;
 
+        private String username;
+        private int score;
+        private int budget;
+
         public ClientHandler(Socket socket) {
             this.socket = socket;
         }
 
+
         private void startIOCommunication() throws IOException {
-            writer = new PrintWriter(socket.getOutputStream(),true);
+            writer = new PrintWriter(socket.getOutputStream(), true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
+
         private void sendMessageToUser(String message) {
             writer.println(message);
         }
 
-        private void readMessageFromUser() {
+        private String readMessageFromUser() {
+            String line = "";
             try {
-                String line = reader.readLine();
+                line = reader.readLine();
                 if (line == null) {
-                    socket.close();
-                    return;
+                    readMessageFromUser();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return line;
         }
 
         private void welcomeClient() throws IOException {
-            System.out.println("New player arrived, waiting for other players");
-            sendMessageToUser("Welcome to BlackJack");
+            System.out.println(Messages.PLAYER_CONNECTED);
+            sendMessageToUser(Messages.WELCOME_PLAYER);
+        }
+
+
+        public void getUsername() {
+            username = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
+            while (username.isBlank()) {
+                username = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
+            }
+            sendMessageToUser(String.format(Messages.WELCOME_USERNAME, username));
+        }
+
+        public void getBudget() {
+            String value = sendMessageAndReadAnswer(Messages.SPENT_AMOUNT);
+            while (!value.matches("^[\\d]+$") || Integer.parseInt(value) <= 5) {
+                value = sendMessageAndReadAnswer(Messages.SPENT_AMOUNT);
+            }
+            budget = Integer.parseInt(value);
+            sendMessageToUser(String.format(Messages.AMOUNT_STARTED, budget));
+        }
+
+        private String sendMessageAndReadAnswer(String message) {
+            sendMessageToUser(message);
+            return readMessageFromUser();
         }
 
         @Override
@@ -86,6 +118,8 @@ public class Server {
             try {
                 startIOCommunication();
                 welcomeClient();
+                getUsername();
+                getBudget();
             } catch (IOException e) {
                 try {
                     socket.close();
@@ -95,3 +129,4 @@ public class Server {
             }
         }
     }
+}
