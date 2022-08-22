@@ -1,4 +1,4 @@
-package academy.mindswap.Card;
+package academy.mindswap.game;
 
 import java.util.ArrayList;
 import java.util.Collections;

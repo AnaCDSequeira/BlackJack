@@ -1,4 +1,4 @@
-package academy.mindswap.Card;
+package academy.mindswap.game;
 
 public enum CardValue {
 	ACE(1),
