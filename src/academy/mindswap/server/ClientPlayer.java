@@ -12,6 +12,7 @@ public class ClientPlayer {
     private final String HOST = "localhost";
     private final int PORT = 1234;
 
+
     public static void main(String[] args) {
         ClientPlayer client = new ClientPlayer();
         client.startConsoleReader();
@@ -32,7 +33,7 @@ public class ClientPlayer {
             this.socket = new Socket(HOST, PORT);
             this.writer = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
-            System.out.println("The Casino is closed now");
+            System.out.println();
             connectToServer();
         }
     }
@@ -48,7 +49,7 @@ public class ClientPlayer {
             sendMessageToServer();
             communicateWithServer();
         } catch (IOException e) {
-            System.out.println("The Casino is closed now");
+            System.out.println(Messages.ERROR_MESSAGE);
             handleServer();
         }
     }
@@ -69,7 +70,7 @@ public class ClientPlayer {
     private void close() {
         try {
             socket.close();
-            System.out.println("The Casino is closed now");
+            System.out.println(Messages.ERROR_MESSAGE);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -77,7 +78,7 @@ public class ClientPlayer {
     }
     private class ServerHandler implements Runnable {
 
-        BufferedReader serverReader;
+        private BufferedReader serverReader;
 
         public ServerHandler(InputStream inputStream) {
             this.serverReader = new BufferedReader(new InputStreamReader(inputStream));
