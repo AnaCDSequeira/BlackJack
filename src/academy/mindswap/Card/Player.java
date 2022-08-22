@@ -1,8 +1,6 @@
 package academy.mindswap.Card;
 
-public class Player {
-
-	private Hand hand;
+public class Player extends Person{
 
 	private String name;
 
@@ -11,22 +9,18 @@ public class Player {
 	private double moneyAvailable;
 
 	public Player(String name, double moneyAvailable) {
-		this.hand = new Hand();
+		super();
 		this.name = name;
 		this.moneyAvailable = moneyAvailable;
 	}
 
-	public void addCard(Card card) {
-		hand.addCard(card);
-	}
-
-	public boolean wantsToPlay() {
+	public boolean wantMoreCards() {
 		return true; // TODO(ask player)
 	}
 
 	public boolean canPlay() {
 		// TODO: Verify minimum bet amount (table should define it)
-		return hand.canPlay();
+		return getHand().canPlay();
 	}
 
 	public void askForBet() {
@@ -36,11 +30,11 @@ public class Player {
 	}
 
 	public boolean hasBlackJack() {
-		return hand.hasBlackJack();
+		return getHand().hasBlackJack();
 	}
 
 	public int getScore() {
-		return hand.getScore();
+		return getHand().getScore();
 	}
 
 	public void getPayment(double betMultiplier) {
@@ -48,11 +42,11 @@ public class Player {
 		resetBet();
 	}
 
-	private void resetBet() {
-		bet = 0;
-	}
-
 	public int getBet() {
 		return bet;
+	}
+
+	private void resetBet() {
+		bet = 0;
 	}
 }

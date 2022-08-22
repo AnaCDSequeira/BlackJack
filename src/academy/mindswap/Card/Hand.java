@@ -10,7 +10,7 @@ public class Hand {
 
 	private int score;
 
-	private ArrayList<Card> cards;
+	private final ArrayList<Card> cards;
 
 	public Hand() {
 		cards = new ArrayList<>();
@@ -41,5 +41,9 @@ public class Hand {
 
 	public boolean hasBlackJack() {
 		return score == BLACKJACK_SCORE;
+	}
+
+	public boolean hasBusted() {
+		return score > BLACKJACK_SCORE;
 	}
 }
