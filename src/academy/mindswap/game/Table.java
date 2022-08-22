@@ -1,5 +1,7 @@
 package academy.mindswap.game;
 
+import academy.mindswap.server.Server;
+
 import java.util.ArrayList;
 
 public class Table {
@@ -10,7 +12,7 @@ public class Table {
 
 	private static final double SIMPLE_WIN_MULTIPLIER = 2;
 
-	private final ArrayList<Player> players;
+	private final ArrayList<Server.ClientHandler> players;
 
 	private final Dealer dealer;
 
@@ -18,14 +20,15 @@ public class Table {
 
 	private boolean askedForCard; //TODO: associar o HIT
 
-	public Table(ArrayList<Player> players, Dealer dealer, DealerShoe dealerShoe) {
+	public Table(ArrayList<Server.ClientHandler> players) {
 		this.players = players;
-		this.dealer = dealer;
-		this.dealerShoe = dealerShoe;
+		this.dealer = new Dealer();
+		this.dealerShoe = new DealerShoe();
 		startGame();
 	}
 
-	private void startGame() {
+	public void startGame() {
+		System.out.println(players.stream().count());
 		dealerShoe.populateShoe();
 		playBlackJack();
 	}
@@ -40,7 +43,7 @@ public class Table {
 	}
 
 	private void playRound() {
-		for (Player player : players) {
+		for (Server.ClientHandler player : players) {
 			while (player.wantMoreCards()) {
 				dealCardTo(player);
 				checkPlayer(player);
@@ -53,12 +56,12 @@ public class Table {
 	}
 
 	private void roundCheck() {
-		for (Player player : players) {
+		for (Server.ClientHandler player : players) {
 			checkPlayer(player);
 		}
 	}
 
-	private void checkPlayer(Player player) {
+	private void checkPlayer(Server.ClientHandler player) {
 		if (player.hasBlackJack() || player.hasBusted()) {
 			dealWithBets();
 			players.remove(player);
@@ -67,7 +70,7 @@ public class Table {
 
 	private void dealWithBets() {
 		int dealerScore = dealer.getScore();
-		for (Player player : players) {
+		for (Server.ClientHandler player : players) {
 			double betMultiplier;
 			if (player.hasBlackJack()) {
 				betMultiplier = BLACKJACK_MULTIPLIER;
@@ -80,19 +83,19 @@ public class Table {
 		}
 	}
 
-	private void pay(Player player, double betMultiplier) {
+	private void pay(Server.ClientHandler player, double betMultiplier) {
 		player.getPayment(betMultiplier);
 	}
 
-	private void askForBets(ArrayList<Player> players) {
-		for (Player player : players) {
+	private void askForBets(ArrayList<Server.ClientHandler> players) {
+		for (Server.ClientHandler player : players) {
 			player.askForBet();
 		}
 	}
 
 	private void dealFirstRound() {
 		for (int i = 0; i < AMOUNT_OF_INITIAL_CARDS; i++) {
-			for (Player player : players) {
+			for (Server.ClientHandler player : players) {
 				dealCardTo(player);
 			}
 			dealCardTo(dealer);
