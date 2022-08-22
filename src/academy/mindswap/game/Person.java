@@ -2,7 +2,7 @@ package academy.mindswap.game;
 
 public abstract class Person {
 
-	private Hand hand;
+	private final Hand hand;
 
 	public Person() {
 		this.hand = new Hand();
@@ -12,6 +12,7 @@ public abstract class Person {
 
 	public void addCard(Card card) {
 		hand.addCard(card);
+//		sendMessageToUser(card.getValue());
 	}
 
 	public boolean hasBusted() {

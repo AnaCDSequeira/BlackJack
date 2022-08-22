@@ -13,7 +13,7 @@ public class Messages {
             "                                    ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝";
     public static final String CHOOSE_USERNAME = "Please choose your username for the game...";
     public static final String WELCOME_USERNAME = "Welcome, %s\n";
-    public static final String SPENT_AMOUNT = "And how much will you spend ? Minimum is 5 euros";
+    public static final String SPENT_AMOUNT = "And how much will you spend? Minimum is 5 euros.";
     public static final String AMOUNT_STARTED = "Nice, you'll start with %d euros";
     public static final String ERROR_MESSAGE = "The Casino is closed now";
 }

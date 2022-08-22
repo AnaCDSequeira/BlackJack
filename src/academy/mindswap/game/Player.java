@@ -24,9 +24,13 @@ public class Player extends Person{
 	}
 
 	public void askForBet() {
-		// TODO: Ask for bet
-		bet = 100;
-		moneyAvailable -= bet;
+//		bet = Integer.parseInt(sendMessageAndReadAnswer("How much do you want to bet?"));
+//		//TODO create enum for chips
+//		if (budget < bet) {
+//			sendMessageToUser("There's not enough money to bet. You have: " + budget);
+//			askForBet();
+//		}
+//		budget -= bet;
 	}
 
 	public boolean hasBlackJack() {
