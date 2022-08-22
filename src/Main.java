@@ -1,22 +1,33 @@
 import BlackJack.Card;
 import BlackJack.Deck;
+import BlackJack.game.Game;
+
+import java.io.IOException;
 
 
 public class Main {
-	public static void main(String[] args) {
-		System.out.println("Hello world!");
-		Card card = new Card();
-		PrintCards print = new PrintCards();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println("Hello world!");
+        Card card = new Card();
+        Game game = new Game();
+        PrintCards print = new PrintCards();
 
 
-		card.deckOf52();
-		System.out.println(card.deckOf52());
+        card.deckOf52();
+        System.out.println(card.deckOf52());
 
 
-		card.first2Cards();
-		System.out.println(card.getCardValue());
+        card.first2Cards();
+        System.out.println(card.getCardValue());
 
-		print.cardsToPrint();
+
+        print.rounds();
+        System.out.println(print.val.length);
+
+
+
+
+
 
 
 
@@ -27,5 +38,5 @@ public class Main {
 		deck.printCards();
 
 */
-	}
+    }
 }

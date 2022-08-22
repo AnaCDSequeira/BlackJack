@@ -28,7 +28,7 @@ public class Card {
 
     public void first2Cards() {
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             String zeroCard = oneDeck.get(i);
             System.out.println(zeroCard);
             //oneDeck.remove(0);
