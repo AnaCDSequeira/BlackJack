@@ -1,5 +1,7 @@
 package academy.mindswap.visualEfect;
 
+import academy.mindswap.server.Messages;
+
 import java.io.IOException;
 
 
@@ -7,20 +9,26 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Hello world!");
         Card card = new Card();
-        Game game = new Game();
         PrintCards print = new PrintCards();
+        System.out.println(Messages.WELCOME_PLAYER);
 
+        System.out.println(Messages.CHOOSE_USERNAME);
+        System.out.println("Diogo");
+        System.out.println(Messages.WELCOME_USERNAME);
+        System.out.println(Messages.SPENT_AMOUNT);
+        System.out.println("5000");
+        System.out.println(Messages.AMOUNT_STARTED);
+        System.out.println(Messages.CHIPS);
+        System.out.println(Messages.SET_BET);
+        System.out.println("50");
 
-        card.deckOf52();
-        System.out.println(card.deckOf52());
-
-
-        card.first2Cards();
-        System.out.println(card.getCardValue());
-
-
-        print.rounds();
-        System.out.println(print.val.length);
+        print.dealerHiddenCard();
+        print.test();
+        System.out.println("You want to 'Hit' or 'Pass'?");
+        System.out.println("Hit");
+        print.test1();
+        //print.rounds();
+        //System.out.println(print.val.length);
 
 
 
