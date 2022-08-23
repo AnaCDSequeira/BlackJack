@@ -7,6 +7,7 @@ public class Dealer extends Person {
 	public Dealer() {
 		super();
 	}
+
 	public Card firstCard() {
 		return getHand().showFirstCard();
 	}
@@ -15,10 +16,7 @@ public class Dealer extends Person {
 		return getHand().getScore() <= MINIMUM_VALUE_TO_DRAW;
 	}
 
-
 	public int getScore() {
 		return getHand().getScore();
 	}
-
-
 }

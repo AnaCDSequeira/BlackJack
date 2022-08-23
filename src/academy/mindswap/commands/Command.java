@@ -1,4 +1,4 @@
-package academy.mindswap.visualEfect.commands;
+package academy.mindswap.commands;
 
 public enum Command {
 /*

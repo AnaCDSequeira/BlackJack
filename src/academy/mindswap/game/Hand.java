@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Hand {
 
 	private static final int INITIAL_SCORE = 0;
-
 	private static final int BLACKJACK_SCORE = 21;
+	public static final int FIRST_CARD_POSITION = 0;
+
 	private final ArrayList<Card> cards;
 	private int score;
 
@@ -46,14 +47,21 @@ public class Hand {
 	}
 
 	public Card showFirstCard(){
-		return cards.get(0);
+		return cards.get(FIRST_CARD_POSITION);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (Card card: cards) {
-			builder.append(card);
+		builder.append("\n");
+		builder.append("Your cards are:\n");
+		for (int i = 0; i < cards.size(); i++) {
+			builder.append(i + 1);
+			builder.append(". ");
+			builder.append(cards.get(i));
+			builder.append(" - ");
+			builder.append(cards.get(i).getValue());
+			builder.append(" points");
 			builder.append("\n");
 		}
 		return builder.toString();

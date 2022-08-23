@@ -23,7 +23,7 @@ public enum CardValue {
 
 	@Override
 	public String toString() {
-		return name().toLowerCase();
+		return name().charAt(0) + name().substring(1).toLowerCase();
 	}
 
 	public int getValue() {

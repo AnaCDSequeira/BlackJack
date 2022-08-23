@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Server {
 
-	public static final int NUMBER_OF_PLAYERS_PER_GAME = 1;
+	public static final int NUMBER_OF_PLAYERS_PER_GAME = 2;
 	private static final int PORT = 1010;
 	private ServerSocket serverSocket;
 	private List<ClientHandler> clients;
@@ -35,14 +35,14 @@ public class Server {
 	private void acceptClient() {
 		try {
 			Socket socket = serverSocket.accept();
-			ClientHandler clientHandler = new ClientHandler(socket);
+			ClientHandler clientHandler = new ClientHandler(socket, this);
 			clients.add(clientHandler);
 
-			clientHandler.run();
+			clientHandler.init();
 
-			createGame();
-
-			acceptClient();
+			if (clients.size() > 0) {
+				createGame();
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

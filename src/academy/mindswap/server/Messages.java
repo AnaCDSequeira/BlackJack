@@ -12,12 +12,14 @@ public class Messages {
             "                                    ██████╔╝███████╗██║  ██║╚██████╗██║  ██╗╚██╗╚█████╔╝██║  ██║╚██████╗██║  ██╗\n" +
             "                                    ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝";
     public static final String CHOOSE_USERNAME = "Please choose your username for the game...";
-    public static final String WELCOME_USERNAME = "Welcome, %s\n";
+    public static final String WELCOME_USERNAME = "Welcome, %s!\n";
     public static final String SPENT_AMOUNT = "And how much will you spend? Minimum is 5 euros.";
-    public static final String AMOUNT_STARTED = "Nice, you'll start with %d euros";
+    public static final String AMOUNT_STARTED = "\nNice, you'll start with %d euros";
     public static final String ERROR_MESSAGE = "The Casino is closed now";
-    public static final String SHOW_SCORE = "Your actual score is: ";
+    public static final String SHOW_SCORE = "Your actual score is: %d\n";
+    public static final String SHOW_DEALER_FIRST_CARD = "First dealer card is:\n%s - %s points\n";
     public static final String GAME_OVER = "You just busted! The game is over for you.";
-
-
+    public static final String BLACKJACK = "You got a Blackjack! Congratulations!";
+    public static final String BET_AMOUNT = "\nHow much do you want to bet?";
+    public static final String NOT_ENOUGH_BUDGET= "There's not enough money to bet. You have: %d";
 }

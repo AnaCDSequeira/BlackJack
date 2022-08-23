@@ -5,7 +5,7 @@ public class Player extends Person {
 	private String name;
 	private int bet;
 	private int budget;
-	private boolean wantCard;
+	private boolean wantMoreCards;
 	private boolean outOfGame;
 
 	public Player() {
@@ -54,16 +54,17 @@ public class Player extends Person {
 		this.bet = bet;
 	}
 
-	public boolean getWantCard() {
-		return wantCard;
+	public boolean wantMoreCards() {
+		return wantMoreCards;
 	}
 
-	public void setWantCard(boolean wantCard) {
-		this.wantCard = wantCard;
+	public void setWantMoreCards(boolean wantMoreCards) {
+		this.wantMoreCards = wantMoreCards;
 	}
 
 	public void setIsOutOfGame(boolean outOfGame) {
 		this.outOfGame = outOfGame;
+		wantMoreCards = false;
 	}
 
 	public boolean isOutOfGame() {

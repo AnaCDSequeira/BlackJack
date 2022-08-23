@@ -10,7 +10,7 @@ public class Client {
 
 	private Socket socket;
 	private BufferedReader consoleReader;
-	private BufferedWriter serverWriter;
+	private PrintWriter serverWriter;
 	private BufferedReader serverReader;
 
 	public static void main(String[] args) {
@@ -43,7 +43,7 @@ public class Client {
 	private void createServerWriterReader() {
 		try {
 			serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			serverWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			serverWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 		} catch (IOException exception) {
 			throw new RuntimeException(exception);
 		}
@@ -66,9 +66,7 @@ public class Client {
 
 	private void sendMessageToServer() throws IOException {
 		String message = readMessageFromServer();
-		serverWriter.write(message);
-		serverWriter.newLine();
-		serverWriter.flush();
+		serverWriter.println(message);
 	}
 
 	private String readMessageFromServer() {

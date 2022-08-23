@@ -8,17 +8,20 @@ import java.net.Socket;
 public class ClientHandler {
 
 	private final Socket socket;
-	private BufferedWriter writer;
+	private PrintWriter writer;
 	private BufferedReader reader;
 
 	private Player player;
 
-	public ClientHandler(Socket socket) {
+	private final Server server;
+
+	public ClientHandler(Socket socket, Server server) {
 		this.socket = socket;
+		this.server = server;
 		startIOCommunication();
 	}
 
-	public void run() {
+	public void init() {
 		try {
 			welcomeClient();
 			readUsername();
@@ -50,7 +53,7 @@ public class ClientHandler {
 
 	public void readBudget() {
 		String value = sendMessageAndReadAnswer(Messages.SPENT_AMOUNT);
-		while (!value.matches("^\\d+$") || Integer.parseInt(value) <= 5) {
+		while (!value.matches("^\\d+$") || Integer.parseInt(value) < 5) {
 			value = sendMessageAndReadAnswer(Messages.SPENT_AMOUNT);
 		}
 		int budget = Integer.parseInt(value);
@@ -60,7 +63,7 @@ public class ClientHandler {
 
 	private void startIOCommunication() {
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -69,30 +72,37 @@ public class ClientHandler {
 
 	public void sendMessageToUser(String message) {
 		try {
-			writer.write(message);
-			writer.newLine();
-			writer.flush();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+			writer.println(message);
+		} catch (Exception e) {
+			System.out.println("Socket is closed.");
 		}
 	}
 
 	private String readMessageFromUser() {
-		String line = "";
+		String message = null;
 		try {
-			line = reader.readLine();
-			if (line == null) {
-				readMessageFromUser();
+			message = reader.readLine();
+		} catch (IOException | NullPointerException e) {
+			quit();
+		} finally {
+			if (message == null) {
+				quit();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-		return line;
+		return message;
 	}
 
 	public String sendMessageAndReadAnswer(String message) {
 		sendMessageToUser(message);
 		return readMessageFromUser();
+	}
+
+	public void quit() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("Couldn't closer player socket");
+		}
 	}
 
 	public Player getPlayer() {
@@ -101,7 +111,7 @@ public class ClientHandler {
 
 	public void askForBet() {
 		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
-		//TODO create enum for chips
+		//TODO: create enum for chips
 		while (player.getBudget() < bet) {
 			sendMessageToUser(String.format(Messages.NOT_ENOUGH_BUDGET, player.getBudget()));
 			bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
@@ -109,13 +119,26 @@ public class ClientHandler {
 		player.setBet(bet);
 	}
 
-	public boolean wantMoreCards() {
-		String response = sendMessageAndReadAnswer("Do you want more cards? Say \"hit\"");
-		player.setWantCard(response.equals("hit"));
-		return player.getWantCard();
-	}
-
 	public void showCards() {
 		sendMessageToUser(player.getHand().toString());
+		sendMessageToUser(String.format(Messages.SHOW_SCORE, getPlayer().getScore()));
+	}
+
+	public void askForCards() {
+		sendMessageToUser("Do you want more cards? Say \"hit\"");
+		String response = readMessageFromUser();
+		while (response == null) {
+			sendMessageToUser("Invalid answer.");
+			response = readMessageFromUser();
+		}
+		player.setWantMoreCards(response.equals("hit"));
+	}
+
+	public void quitGame() {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
