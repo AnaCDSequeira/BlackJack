@@ -1,5 +1,8 @@
 package academy.mindswap.server;
 
+/**
+ * Class with game Strings
+ */
 public class Messages {
 
     public static final String OPEN_SERVER = "BlackJack is open and accepting players";

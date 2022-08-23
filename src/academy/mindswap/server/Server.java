@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Class Server which is the connection with the clients
+ */
+
 public class Server {
 
 	public static final int NUMBER_OF_PLAYERS_PER_GAME = 2;
@@ -26,6 +30,9 @@ public class Server {
 		server.acceptClient();
 	}
 
+	/**
+	 * Starts server with new socket, new pool and new list of games
+	 */
 	private void startServer() {
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -40,6 +47,10 @@ public class Server {
 		System.out.println(Messages.OPEN_SERVER);
 	}
 
+	/**
+	 * Method to find a game available to be played and accepts a connection from a client to start a game in a threadpool
+	 * Its is called recursively
+	 */
 	private void acceptClient() {
 		try {
 			Table table = games.stream()
