@@ -1,5 +1,8 @@
 package academy.mindswap.game;
 
+/**
+ * Enumerator with all cases of cards value
+ */
 public enum CardValue {
 	ACE(1),
 	TWO(2),

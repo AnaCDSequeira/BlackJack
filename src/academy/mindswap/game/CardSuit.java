@@ -1,5 +1,9 @@
 package academy.mindswap.game;
 
+/**
+ * Enumerator with all cases of cards suit
+ */
+
 public enum CardSuit {
 	DIAMONDS,
 	SPADES,

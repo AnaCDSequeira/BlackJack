@@ -1,8 +1,12 @@
 package academy.mindswap.game;
 
+/**
+ * Superclass containing properties a player must have
+ */
 public abstract class Person {
 
 	private final Hand hand;
+
 
 	public Person() {
 		this.hand = new Hand();

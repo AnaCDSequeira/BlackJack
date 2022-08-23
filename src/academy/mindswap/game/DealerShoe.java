@@ -3,12 +3,18 @@ package academy.mindswap.game;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Represents the machine that throws random cards to fill players hands
+ */
 public class DealerShoe {
 
 	private static final int NUMBER_OF_DECKS = 6;
 
 	private final ArrayList<Card> shoe = new ArrayList<>();
 
+	/**
+	 * Method to fill the list shoe with cards and shuffle them
+	 */
 	public void populateShoe() {
 		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
 			Deck deck = new Deck();
@@ -16,6 +22,10 @@ public class DealerShoe {
 		}
 		shuffleCards();
 	}
+	/**
+	 * Method to get a card returned by other method (drawCardFromTop())
+	 * @return the last card from the shuffled shoe
+	 */
 
 	public Card askForCard() {
 		return drawCardFromTop();
@@ -25,6 +35,10 @@ public class DealerShoe {
 		Collections.shuffle(shoe);
 	}
 
+	/**
+	 * Method to get the last card from the list shoe, remove it and return it
+	 * @return the last card from the shuffled shoe
+	 */
 	private Card drawCardFromTop() {
 		int lastCardPosition = getLastCardPosition();
 		Card card = shoe.get(lastCardPosition);

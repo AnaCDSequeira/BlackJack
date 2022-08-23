@@ -10,17 +10,23 @@ import java.util.concurrent.Executors;
 
 import static academy.mindswap.server.Server.NUMBER_OF_PLAYERS_PER_GAME;
 
+/**
+ * Class containing game funcionality
+ */
 public class Table implements Runnable {
 
 	private static final int AMOUNT_OF_INITIAL_CARDS = 2;
-	private static final double BLACKJACK_MULTIPLIER = 2.5;
-	private static final double SIMPLE_WIN_MULTIPLIER = 2;
+	private static final double BLACKJACK_MULTIPLIER = 2.5;  // value to multiply with bet
+	private static final double SIMPLE_WIN_MULTIPLIER = 2;  // value to multiply with bet
 
 	private final Dealer dealer;
 	private final DealerShoe dealerShoe;
 	private final List<ClientHandler> clients;
 	ExecutorService executorService;
 
+	/**
+	 * constructor that creates a dealer, a list to accept players, a shoe to draw cards and a thread pool
+	 */
 	public Table() {
 		this.clients = new ArrayList<>();
 		this.dealer = new Dealer();
@@ -33,6 +39,9 @@ public class Table implements Runnable {
 		startGame();
 	}
 
+	/**
+	 * Check if players can have entered the table and set name and budget, and starts game
+	 */
 	private void startGame() {
 		if (clients.stream().allMatch(ClientHandler::isReadyToStart)) {
 			try {
@@ -48,15 +57,27 @@ public class Table implements Runnable {
 		playBlackJack();
 	}
 
+	/**
+	 * Method to start a new thread and add player to list of players
+	 * @param clientHandler accepts a player sent by the server
+	 */
+
 	public void addClient(ClientHandler clientHandler) {
 		clients.add(clientHandler);
 		executorService.submit(clientHandler);
 	}
 
+	/**
+	 * Checks the list of clients available is bigger than the minimum of players needed to start a game
+	 * @return
+	 */
 	public boolean canStart() {
 		return clients.size() >= NUMBER_OF_PLAYERS_PER_GAME;
 	}
 
+	/**
+	 * Method to start game, gives cards to players and stars a round
+	 */
 	private void playBlackJack() {
 		try {
 			dealFirstRound();
@@ -65,6 +86,12 @@ public class Table implements Runnable {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Method to checks if player has blackjack, then shows all players cards and asks if player wants to hit cards or stand.
+	 * Then it checks results
+	 * @throws InterruptedException
+	 */
 
 	private void playRound() throws InterruptedException {
 		clients.forEach(client -> {
@@ -89,17 +116,15 @@ public class Table implements Runnable {
 			});
 		}
 		checkResults(clients);
-//		announcePaymentResults(clients);
 	}
 
 	// TODO: Fix concurrency issues
-	private void announcePaymentResults(List<ClientHandler> clients) {
-		clients.forEach(client -> {
-			client.sendMessageToUser(String.format(Messages.PAYMENT, client.getPlayer().getValueWon()));
-			client.sendMessageToUser(String.format(Messages.MONEY_AVAILABLE, client.getPlayer().getBudget()));
-		});
-	}
 
+
+	/**
+	 * Method to check if player has blackjack and sets his property "outOfGame" to true
+	 * @param client receives a players to be checked
+	 */
 	private void checkBlackjack(ClientHandler client) {
 		Player player = client.getPlayer();
 		if (player.hasBlackJack()) {
@@ -108,6 +133,10 @@ public class Table implements Runnable {
 		}
 	}
 
+	/**
+	 * Method to show the player the dealers no hidden cards on the first hand
+	 * @param client receives a client to send message
+	 */
 	private void showDealerCard(ClientHandler client) {
 		client.sendMessageToUser(String.format(
 				Messages.SHOW_DEALER_FIRST_CARD,
@@ -115,6 +144,11 @@ public class Table implements Runnable {
 				dealer.firstCard().getValue()
 		));
 	}
+
+	/**
+	 * Method to show cards and send messages to player if has blackjack or bust
+	 * @param client receives a client to do the explanation above
+	 */
 
 	private void checkPlayer(ClientHandler client) {
 		Player player = client.getPlayer();
@@ -130,6 +164,11 @@ public class Table implements Runnable {
 			client.sendMessageToUser(Messages.BUSTED);
 		}
 	}
+
+	/**
+	 * Method to comparate results from player and dealer and send messages accordingly
+	 * @param clients receives the list of players
+	 */
 
 	private void checkResults(List<ClientHandler> clients) {
 		clients.forEach(client -> {
@@ -152,11 +191,16 @@ public class Table implements Runnable {
 		});
 	}
 
+	/**
+	 * Method to check how much player will win or not accordingly to winning (blackjack, normal, no win)
+	 */
+
 	private void dealWithBets() {
 		int dealerScore = dealer.getScore();
 		clients.forEach(client -> {
 			Player player = client.getPlayer();
 			double betMultiplier;
+
 			if (player.hasBlackJack()) {
 				betMultiplier = BLACKJACK_MULTIPLIER;
 			} else if (player.getScore() > dealerScore || dealer.hasBusted()) {
@@ -168,16 +212,29 @@ public class Table implements Runnable {
 		});
 	}
 
+	/**
+	 * Method to pay the client
+	 * @param client client to be paid
+	 * @param betMultiplier how much to multiply his bet
+	 */
 	private void pay(ClientHandler client, double betMultiplier) {
 		client.getPlayer().setPayment(betMultiplier);
 	}
 
+	/**
+	 * Method to give cards to players and dealer
+	 */
 	private void dealFirstRound() {
 		for (int i = 0; i < AMOUNT_OF_INITIAL_CARDS; i++) {
 			clients.forEach(client -> dealCardTo(client.getPlayer()));
 			dealCardTo(dealer);
 		}
 	}
+
+	/**
+	 * Methos to ask a card from the shoe to give to players
+	 * @param person the player receiving the card
+	 */
 
 	private void dealCardTo(Person person) {
 		Card card = dealerShoe.askForCard();
