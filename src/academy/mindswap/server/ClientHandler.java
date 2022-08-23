@@ -1,5 +1,6 @@
 package academy.mindswap.server;
 
+import academy.mindswap.game.Person;
 import academy.mindswap.game.Player;
 
 import java.io.*;
@@ -10,15 +11,17 @@ public class ClientHandler implements Runnable{
 	private final Socket socket;
 	private PrintWriter writer;
 	private BufferedReader reader;
-
 	private Player player;
-
-	private final Server server;
 	private boolean readyToStart;
-	public ClientHandler(Socket socket, Server server) {
+
+	public ClientHandler(Socket socket) {
 		this.socket = socket;
-		this.server = server;
 		startIOCommunication();
+	}
+
+	@Override
+	public void run() {
+		init();
 	}
 
 	public void init() {
@@ -28,8 +31,6 @@ public class ClientHandler implements Runnable{
 			readBudget();
 			askForBet();
 			readyToStart = true;
-
-
 		} catch (IOException e) {
 			try {
 				socket.close();
@@ -68,35 +69,12 @@ public class ClientHandler implements Runnable{
 		player.setBudget(budget);
 	}
 
-	private void startIOCommunication() {
-		try {
-			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public void sendMessageToUser(String message) {
 		try {
 			writer.println(message);
 		} catch (Exception e) {
 			System.out.println("Socket is closed.");
 		}
-	}
-
-	private String readMessageFromUser() {
-		String message = null;
-		try {
-			message = reader.readLine();
-		} catch (IOException | NullPointerException e) {
-			quit();
-		} finally {
-			if (message == null) {
-				quit();
-			}
-		}
-		return message;
 	}
 
 	public String sendMessageAndReadAnswer(String message) {
@@ -119,7 +97,7 @@ public class ClientHandler implements Runnable{
 	public void askForBet() {
 		sendMessageToUser(Messages.CHIPS);
 		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
-		//TODO: create enum for chips
+		// TODO: create enum for chips
 		while (player.getBudget() < bet) {
 			sendMessageToUser(String.format(Messages.NOT_ENOUGH_BUDGET, player.getBudget()));
 			bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
@@ -127,9 +105,9 @@ public class ClientHandler implements Runnable{
 		player.setBet(bet);
 	}
 
-	public void showCards() {
-		sendMessageToUser(player.getHand().toString());
-		sendMessageToUser(String.format(Messages.SHOW_SCORE, getPlayer().getScore()));
+	public void showCards(Person person) {
+		sendMessageToUser(String.format(Messages.SHOW_CARDS, person.getName(), person.getHand().toString()));
+		sendMessageToUser(String.format(Messages.SHOW_SCORE, person.getName(), person.getScore()));
 	}
 
 	public void askForCards() {
@@ -149,9 +127,26 @@ public class ClientHandler implements Runnable{
 			throw new RuntimeException(e);
 		}
 	}
+	private void startIOCommunication() {
+		try {
+			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-	@Override
-	public void run() {
-		init();
+	private String readMessageFromUser() {
+		String message = null;
+		try {
+			message = reader.readLine();
+		} catch (IOException | NullPointerException e) {
+			quit();
+		} finally {
+			if (message == null) {
+				quit();
+			}
+		}
+		return message;
 	}
 }

@@ -7,7 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,16 +14,10 @@ public class Server {
 
 	public static final int NUMBER_OF_PLAYERS_PER_GAME = 2;
 	private static final int PORT = 1010;
+
 	private ServerSocket serverSocket;
-	private List<ClientHandler> clients;
-
 	private List<Table> games;
-
 	private ExecutorService executorService;
-
-
-
-
 
 	public static void main(String[] args) {
 
@@ -36,7 +29,7 @@ public class Server {
 	private void startServer() {
 		try {
 			serverSocket = new ServerSocket(PORT);
-			executorService =  Executors.newCachedThreadPool();
+			executorService = Executors.newCachedThreadPool();
 			games = new ArrayList<>();
 
 
@@ -49,34 +42,25 @@ public class Server {
 
 	private void acceptClient() {
 		try {
-
-			Table table = 	games.stream().
-					filter(t -> !t.canStart())
+			Table table = games.stream()
+					.filter(t -> !t.canStart())
 					.findFirst().orElse(new Table());
 
-			if (!games.contains(table)){
+			if (!games.contains(table)) {
 				games.add(table);
 			}
 			Socket socket = serverSocket.accept();
-			ClientHandler clientHandler = new ClientHandler(socket, this);
+			ClientHandler clientHandler = new ClientHandler(socket);
 			table.addClient(clientHandler);
 
 			if (table.canStart()) {
 				executorService.submit(table);
 			}
+
 			acceptClient();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
-	private boolean createGame() {
-		if (clients.size() < NUMBER_OF_PLAYERS_PER_GAME) {
-			return false;
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
-
-		Table table = new Table();
-		new Thread(table).start();
-		return true;
 	}
 }

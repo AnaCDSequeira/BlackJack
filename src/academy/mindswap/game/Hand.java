@@ -53,8 +53,6 @@ public class Hand {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\n");
-		builder.append("Your cards are:\n");
 		for (int i = 0; i < cards.size(); i++) {
 			builder.append(i + 1);
 			builder.append(". ");

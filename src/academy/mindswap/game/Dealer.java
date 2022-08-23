@@ -12,11 +12,16 @@ public class Dealer extends Person {
 		return getHand().showFirstCard();
 	}
 
-	public boolean canPlay() {
+	public boolean shouldDrawCards() {
 		return getHand().getScore() <= MINIMUM_VALUE_TO_DRAW;
 	}
 
 	public int getScore() {
 		return getHand().getScore();
+	}
+
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
 	}
 }

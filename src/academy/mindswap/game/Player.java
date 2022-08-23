@@ -12,17 +12,13 @@ public class Player extends Person {
 		super();
 	}
 
-	public boolean canPlay() {
+	public boolean shouldDrawCards() {
 		// TODO: Verify minimum bet amount (table should define it)
 		return getHand().canPlay();
 	}
 
 	public boolean hasBlackJack() {
 		return getHand().hasBlackJack();
-	}
-
-	public int getScore() {
-		return getHand().getScore();
 	}
 
 	public void getPayment(double betMultiplier) {
@@ -69,5 +65,10 @@ public class Player extends Person {
 
 	public boolean isOutOfGame() {
 		return outOfGame;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

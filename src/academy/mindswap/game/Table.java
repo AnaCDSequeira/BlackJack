@@ -14,18 +14,13 @@ import static academy.mindswap.server.Server.NUMBER_OF_PLAYERS_PER_GAME;
 public class Table implements Runnable {
 
 	private static final int AMOUNT_OF_INITIAL_CARDS = 2;
-
 	private static final double BLACKJACK_MULTIPLIER = 2.5;
-
 	private static final double SIMPLE_WIN_MULTIPLIER = 2;
+
 	private final Dealer dealer;
 	private final DealerShoe dealerShoe;
-	private volatile List<ClientHandler> clients;
-	private boolean askedForCard; //TODO: associar o HIT
-	private boolean hasStarted;
+	private final List<ClientHandler> clients;
 	ExecutorService executorService;
-
-
 
 	public Table() {
 		this.clients = new ArrayList<>();
@@ -40,36 +35,32 @@ public class Table implements Runnable {
 	}
 
 	private void startGame() {
-		if(clients.stream()
-				.filter(clientHandler -> clientHandler.isReadyToStart())
-				.collect(Collectors.toList()).size() == clients.size()){
+		if (clients.stream().allMatch(ClientHandler::isReadyToStart)) {
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+			} catch (InterruptedException exception) {
+				throw new RuntimeException(exception);
 			}
+
 			startGame();
 		}
-		hasStarted = true;
+
 		dealerShoe.populateShoe();
 		playBlackJack();
+	}
 
-	}
-	public boolean isHasStarted() {
-		return hasStarted;
-	}
-	public void addClient(ClientHandler clientHandler){
+	public void addClient(ClientHandler clientHandler) {
 		clients.add(clientHandler);
 		executorService.submit(clientHandler);
 	}
 
-	public boolean canStart(){
+	public boolean canStart() {
 		return clients.size() >= NUMBER_OF_PLAYERS_PER_GAME;
 	}
+
 	private void playBlackJack() {
 		try {
 			dealFirstRound();
-			roundCheck();
 			playRound();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
@@ -79,8 +70,9 @@ public class Table implements Runnable {
 	private void playRound() throws InterruptedException {
 		for (ClientHandler client : clients) {
 			Player player = client.getPlayer();
+			checkBlackjack(client);
 			do {
-				client.showCards();
+				client.showCards(player);
 				showDealerCard(client);
 				client.askForCards();
 				if (player.wantMoreCards()) {
@@ -88,7 +80,23 @@ public class Table implements Runnable {
 					checkPlayer(client);
 				}
 			} while (player.wantMoreCards() && !player.isOutOfGame());
-			client.sendMessageToUser("Game is over.");
+		}
+		while (dealer.shouldDrawCards()) {
+			dealCardTo(dealer);
+			for (ClientHandler client : clients) {
+				client.sendMessageToUser(Messages.DEALER_DRAWING_CARD);
+				client.showCards(dealer);
+			}
+		}
+		roundCheck();
+	}
+
+	private void checkBlackjack(ClientHandler client) {
+		Player player = client.getPlayer();
+		if (player.hasBlackJack()) {
+			client.showCards(player);
+			dealWithBets();
+			player.setIsOutOfGame(true);
 		}
 	}
 
@@ -96,8 +104,8 @@ public class Table implements Runnable {
 		client.sendMessageToUser(String.format(
 				Messages.SHOW_DEALER_FIRST_CARD,
 				dealer.firstCard(),
-				dealer.firstCard().getValue())
-		);
+				dealer.firstCard().getValue()
+		));
 	}
 
 	private void roundCheck() {
@@ -109,15 +117,29 @@ public class Table implements Runnable {
 	private void checkPlayer(ClientHandler client) {
 		Player player = client.getPlayer();
 		if (player.hasBlackJack() || player.hasBusted()) {
-			client.showCards();
+			client.showCards(player);
 			dealWithBets();
 			player.setIsOutOfGame(true);
 		}
 		if (player.hasBlackJack()) {
 			client.sendMessageToUser(Messages.BLACKJACK);
+			return;
 		}
 		if (player.hasBusted()) {
-			client.sendMessageToUser(Messages.GAME_OVER);
+			client.sendMessageToUser(Messages.BUSTED);
+			return;
+		}
+		if (dealer.hasBusted()) {
+			client.sendMessageToUser(Messages.BUSTED_DEALER);
+			client.sendMessageToUser(Messages.SIMPLE_WIN);
+			return;
+		}
+		if (dealer.getScore() > player.getScore()) {
+			client.sendMessageToUser(Messages.DEALER_WIN);
+		} else if (dealer.getScore() == player.getScore()) {
+			client.sendMessageToUser(Messages.DRAW);
+		} else {
+			client.sendMessageToUser(Messages.SIMPLE_WIN);
 		}
 	}
 
