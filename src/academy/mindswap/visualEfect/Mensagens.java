@@ -35,6 +35,26 @@ public class Mensagens {
             -Players win their bet if they beat the dealer. Players win 1.5x their bet if they get “Blackjack” which is 21.
             """;
 
-
-
+    public static final String HELP1 = """
+                                ______________________________________
+                    _.---------|.--.        --- RULES ---             |
+                 .-'  `       .'/  ``                                 |
+              .-'           .' |    /| - Place your bets              |
+           .-'         |   /   `.__//  -Each player is dealt 2 cards  |
+        .-'           _.--/        /-Pick 'Hit' and you get a new card|
+       |        _  .-'   /        / -Pick 'Stand' your score stays    |
+       |     ._  \\      /      ` /      and is the dealer's turn      |
+       |        ` .    /     `  /                                     |
+       |         \\ \\'/         / -If you don't burst and your hand is |
+       |        - \\ /         /|   better then the dealer's,          |
+       |        '  .'        / |            you Win!                  |
+       |                    |  |______________________________________|
+       |                    |.'
+       |                   /
+       )                 /|
+    .A/`-.              / |
+   AMMMA. `-._         / /
+  AMMMMMMMMA. `-.     / /
+ AMMMMMMMMMMMMA. `.    /
+AMMMMMMMMMMMMMMMMA.`. /""";
 }

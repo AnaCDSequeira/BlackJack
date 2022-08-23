@@ -18,7 +18,7 @@ public class Main {
         System.out.println(Messages.SPENT_AMOUNT);
         System.out.println("5000");
         System.out.println(Messages.AMOUNT_STARTED);
-        System.out.println(Messages.CHIPS);
+        System.out.println(Mensagens.CHIPS);
         System.out.println(Messages.SET_BET);
         System.out.println("50");
 
@@ -27,6 +27,7 @@ public class Main {
         System.out.println("You want to 'Hit' or 'Pass'?");
         System.out.println("Hit");
         print.test1();
+        System.out.println(Mensagens.HELP1);
         //print.rounds();
         //System.out.println(print.val.length);
 
