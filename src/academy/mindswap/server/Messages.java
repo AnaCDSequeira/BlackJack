@@ -28,6 +28,8 @@ public class Messages {
     public static final String SIMPLE_WIN = "You won! Congratulations!";
     public static final String DEALER_WIN = "Dealer won. Better luck next time...";
     public static final String DRAW = "It's a draw. Nobody wins";
+    public static final String SOCKET_CLOSE = "Socket is closed.";
+    public static final String SOCKET_CANT_CLOSE = "Couldn't close player socket";
     public static final String BET_AMOUNT = "\nHow much do you want to bet?";
     public static final String NOT_ENOUGH_BUDGET= "There's not enough money to bet. You have: %d";
     public static final String DEALER_DRAWING_CARD = "Dealer must draw another card. Drawing...";
