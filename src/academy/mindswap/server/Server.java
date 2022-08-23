@@ -1,6 +1,5 @@
 package academy.mindswap.server;
 
-import academy.mindswap.game.Player;
 import academy.mindswap.game.Table;
 
 import java.io.IOException;
@@ -11,11 +10,9 @@ import java.util.List;
 
 public class Server {
 
-	private static final int PORT = 1010;
 	public static final int NUMBER_OF_PLAYERS_PER_GAME = 1;
-
+	private static final int PORT = 1010;
 	private ServerSocket serverSocket;
-	private List<Player> players;
 	private List<ClientHandler> clients;
 
 	public static void main(String[] args) {
@@ -27,7 +24,6 @@ public class Server {
 	private void startServer() {
 		try {
 			serverSocket = new ServerSocket(PORT);
-			players = new ArrayList<>();
 			clients = new ArrayList<>();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -38,12 +34,11 @@ public class Server {
 
 	private void acceptClient() {
 		try {
-			while (players.size() < NUMBER_OF_PLAYERS_PER_GAME) {
-				Socket socket = serverSocket.accept();
-				ClientHandler clientHandler = new ClientHandler(socket);
-				clients.add(clientHandler);
-				new Thread(clientHandler).start();
-			}
+			Socket socket = serverSocket.accept();
+			ClientHandler clientHandler = new ClientHandler(socket);
+			clients.add(clientHandler);
+
+			clientHandler.run();
 
 			createGame();
 
@@ -55,11 +50,11 @@ public class Server {
 	}
 
 	private void createGame() {
-		for (ClientHandler client: clients) {
-			Player player = new Player(client.getUsername(), client.getBudget());
-			players.add(player);
+		if (clients.size() < NUMBER_OF_PLAYERS_PER_GAME) {
+			return;
 		}
-		Table table = new Table(players);
+
+		Table table = new Table(clients);
 		new Thread(table).start();
 	}
 }

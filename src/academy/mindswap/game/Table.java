@@ -1,6 +1,7 @@
 package academy.mindswap.game;
 
-import java.util.ArrayList;
+import academy.mindswap.server.ClientHandler;
+
 import java.util.List;
 
 public class Table implements Runnable {
@@ -11,7 +12,7 @@ public class Table implements Runnable {
 
 	private static final double SIMPLE_WIN_MULTIPLIER = 2;
 
-	private final List<Player> players;
+	private final List<ClientHandler> clients;
 
 	private final Dealer dealer;
 
@@ -19,64 +20,77 @@ public class Table implements Runnable {
 
 	private boolean askedForCard; //TODO: associar o HIT
 
-	public Table(List<Player> players) {
-		this.players = players;
+	public Table(List<ClientHandler> clients) {
+		this.clients = clients;
 		this.dealer = new Dealer();
 		this.dealerShoe = new DealerShoe();
 	}
 
-	public void startGame() {
+	@Override
+	public void run() {
+		startGame();
+	}
+
+	private void startGame() {
 		dealerShoe.populateShoe();
 		playBlackJack();
 	}
 
 	private void playBlackJack() {
-//        askForBets(players);
 		dealFirstRound();
 		roundCheck();
-		while (players.size() > 0) {
+		while (clients.size() > 0) {
 			playRound();
 		}
 	}
 
 	private void playRound() {
-		for (Player player : players) {
-			while (player.wantMoreCards()) {
-				dealCardTo(player);
-				checkPlayer(player);
+		for (ClientHandler client : clients) {
+			Player player = client.getPlayer();
+			client.showCards();
+			while (client.wantMoreCards()) {
+				dealCardTo(client.getPlayer());
+				client.sendMessageToUser(client.getPlayer().getHand().toString());
+				checkPlayer(client);
+				if (player.isOutOfGame()) {
+					break;
+				}
 			}
 		}
 		while (dealer.canPlay()) {
+			System.out.println("Estamos no dealer!!");
 //            dealCardTo(dealer);
 		}
 		roundCheck();
 	}
 
 	private void roundCheck() {
-		for (Player player : players) {
-			checkPlayer(player);
+		for (ClientHandler client : clients) {
+			checkPlayer(client);
 		}
 	}
 
-	private void checkPlayer(Player player) {
+	private void checkPlayer(ClientHandler client) {
+		Player player = client.getPlayer();
 		if (player.hasBlackJack() || player.hasBusted()) {
 			dealWithBets();
-			players.remove(player);
+			client.sendMessageToUser("Foste!");
+			player.setIsOutOfGame(true);
 		}
 	}
 
 	private void dealWithBets() {
 		int dealerScore = dealer.getScore();
-		for (Player player : players) {
+		for (ClientHandler client : clients) {
 			double betMultiplier;
-			if (player.hasBlackJack()) {
+			if (client.getPlayer().hasBlackJack()) {
 				betMultiplier = BLACKJACK_MULTIPLIER;
-			} else if (player.getScore() > dealerScore || dealer.hasBusted()) {
+			} else if (client.getPlayer().getScore() > dealerScore || dealer.hasBusted()) {
 				betMultiplier = SIMPLE_WIN_MULTIPLIER;
 			} else {
 				betMultiplier = 0;
 			}
-			pay(player, betMultiplier);
+			pay(client.getPlayer(), betMultiplier);
 		}
 	}
 
@@ -84,28 +98,17 @@ public class Table implements Runnable {
 		player.getPayment(betMultiplier);
 	}
 
-	private void askForBets(ArrayList<Player> players) {
-		for (Player player : players) {
-			player.askForBet();
-		}
-	}
-
 	private void dealFirstRound() {
 		for (int i = 0; i < AMOUNT_OF_INITIAL_CARDS; i++) {
-			for (Player player : players) {
-				dealCardTo(player);
+			for (ClientHandler client : clients) {
+				dealCardTo(client.getPlayer());
 			}
-//            dealCardTo(dealer);
+			dealCardTo(dealer);
 		}
 	}
 
-	private void dealCardTo(Player player) {
+	private void dealCardTo(Person person) {
 		Card card = dealerShoe.askForCard();
-		player.addCard(card);
-	}
-
-	@Override
-	public void run() {
-		startGame();
+		person.addCard(card);
 	}
 }

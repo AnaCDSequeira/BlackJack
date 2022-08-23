@@ -12,7 +12,6 @@ public abstract class Person {
 
 	public void addCard(Card card) {
 		hand.addCard(card);
-//		sendMessageToUser(card.getValue());
 	}
 
 	public boolean hasBusted() {

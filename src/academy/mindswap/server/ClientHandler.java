@@ -1,28 +1,29 @@
 package academy.mindswap.server;
 
+import academy.mindswap.game.Player;
+
 import java.io.*;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler {
 
 	private final Socket socket;
 	private BufferedWriter writer;
 	private BufferedReader reader;
 
-	private String username;
-	private int budget;
+	private Player player;
 
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
 		startIOCommunication();
 	}
 
-	@Override
 	public void run() {
 		try {
 			welcomeClient();
 			readUsername();
 			readBudget();
+			askForBet();
 		} catch (IOException e) {
 			try {
 				socket.close();
@@ -31,17 +32,20 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
+
 	public void welcomeClient() throws IOException {
 		System.out.println(Messages.PLAYER_CONNECTED);
 		sendMessageToUser(Messages.WELCOME_PLAYER);
+		player = new Player();
 	}
 
 	public void readUsername() {
-		username = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
-		while (username == null || username.isBlank()) {
-			username = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
+		String name = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
+		while (name == null || name.isBlank()) {
+			name = sendMessageAndReadAnswer(Messages.CHOOSE_USERNAME);
 		}
-		sendMessageToUser(String.format(Messages.WELCOME_USERNAME, username));
+		sendMessageToUser(String.format(Messages.WELCOME_USERNAME, name));
+		player.setName(name);
 	}
 
 	public void readBudget() {
@@ -49,16 +53,9 @@ public class ClientHandler implements Runnable {
 		while (!value.matches("^\\d+$") || Integer.parseInt(value) <= 5) {
 			value = sendMessageAndReadAnswer(Messages.SPENT_AMOUNT);
 		}
-		budget = Integer.parseInt(value);
+		int budget = Integer.parseInt(value);
 		sendMessageToUser(String.format(Messages.AMOUNT_STARTED, budget));
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public int getBudget() {
-		return budget;
+		player.setBudget(budget);
 	}
 
 	private void startIOCommunication() {
@@ -70,7 +67,7 @@ public class ClientHandler implements Runnable {
 		}
 	}
 
-	private void sendMessageToUser(String message) {
+	public void sendMessageToUser(String message) {
 		try {
 			writer.write(message);
 			writer.newLine();
@@ -93,8 +90,32 @@ public class ClientHandler implements Runnable {
 		return line;
 	}
 
-	private String sendMessageAndReadAnswer(String message) {
+	public String sendMessageAndReadAnswer(String message) {
 		sendMessageToUser(message);
 		return readMessageFromUser();
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void askForBet() {
+		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
+		//TODO create enum for chips
+		while (player.getBudget() < bet) {
+			sendMessageToUser(String.format(Messages.NOT_ENOUGH_BUDGET, player.getBudget()));
+			bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
+		}
+		player.setBet(bet);
+	}
+
+	public boolean wantMoreCards() {
+		String response = sendMessageAndReadAnswer("Do you want more cards? Say \"hit\"");
+		player.setWantCard(response.equals("hit"));
+		return player.getWantCard();
+	}
+
+	public void showCards() {
+		sendMessageToUser(player.getHand().toString());
 	}
 }
