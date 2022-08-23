@@ -7,10 +7,8 @@ public class Hand {
 	private static final int INITIAL_SCORE = 0;
 
 	private static final int BLACKJACK_SCORE = 21;
-
-	private int score;
-
 	private final ArrayList<Card> cards;
+	private int score;
 
 	public Hand() {
 		cards = new ArrayList<>();
@@ -45,5 +43,15 @@ public class Hand {
 
 	public boolean hasBusted() {
 		return score > BLACKJACK_SCORE;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (Card card: cards) {
+			builder.append(card);
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }

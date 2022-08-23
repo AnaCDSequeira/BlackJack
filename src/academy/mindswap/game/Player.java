@@ -1,36 +1,20 @@
 package academy.mindswap.game;
 
-public class Player extends Person{
+public class Player extends Person {
 
 	private String name;
-
 	private int bet;
+	private int budget;
+	private boolean wantCard;
+	private boolean outOfGame;
 
-	private double moneyAvailable;
-
-	public Player(String name, double moneyAvailable) {
+	public Player() {
 		super();
-		this.name = name;
-		this.moneyAvailable = moneyAvailable;
-	}
-
-	public boolean wantMoreCards() {
-		return true; // TODO(ask player)
 	}
 
 	public boolean canPlay() {
 		// TODO: Verify minimum bet amount (table should define it)
 		return getHand().canPlay();
-	}
-
-	public void askForBet() {
-//		bet = Integer.parseInt(sendMessageAndReadAnswer("How much do you want to bet?"));
-//		//TODO create enum for chips
-//		if (budget < bet) {
-//			sendMessageToUser("There's not enough money to bet. You have: " + budget);
-//			askForBet();
-//		}
-//		budget -= bet;
 	}
 
 	public boolean hasBlackJack() {
@@ -42,15 +26,47 @@ public class Player extends Person{
 	}
 
 	public void getPayment(double betMultiplier) {
-		moneyAvailable += bet * betMultiplier;
+		budget += bet * betMultiplier;
 		resetBet();
+	}
+
+	private void resetBet() {
+		bet = 0;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getBudget() {
+		return budget;
+	}
+
+	public void setBudget(int budget) {
+		this.budget = budget;
 	}
 
 	public int getBet() {
 		return bet;
 	}
 
-	private void resetBet() {
-		bet = 0;
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
+
+	public boolean getWantCard() {
+		return wantCard;
+	}
+
+	public void setWantCard(boolean wantCard) {
+		this.wantCard = wantCard;
+	}
+
+	public void setIsOutOfGame(boolean outOfGame) {
+		this.outOfGame = outOfGame;
+	}
+
+	public boolean isOutOfGame() {
+		return outOfGame;
 	}
 }
