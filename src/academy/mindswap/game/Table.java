@@ -3,7 +3,13 @@ package academy.mindswap.game;
 import academy.mindswap.server.ClientHandler;
 import academy.mindswap.server.Messages;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+import static academy.mindswap.server.Server.NUMBER_OF_PLAYERS_PER_GAME;
 
 public class Table implements Runnable {
 
@@ -16,11 +22,16 @@ public class Table implements Runnable {
 	private final DealerShoe dealerShoe;
 	private volatile List<ClientHandler> clients;
 	private boolean askedForCard; //TODO: associar o HIT
+	private boolean hasStarted;
+	ExecutorService executorService;
 
-	public Table(List<ClientHandler> clients) {
-		this.clients = clients;
+
+
+	public Table() {
+		this.clients = new ArrayList<>();
 		this.dealer = new Dealer();
 		this.dealerShoe = new DealerShoe();
+		executorService = Executors.newCachedThreadPool();
 	}
 
 	@Override
@@ -29,10 +40,32 @@ public class Table implements Runnable {
 	}
 
 	private void startGame() {
+		if(clients.stream()
+				.filter(clientHandler -> clientHandler.isReadyToStart())
+				.collect(Collectors.toList()).size() == clients.size()){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			startGame();
+		}
+		hasStarted = true;
 		dealerShoe.populateShoe();
 		playBlackJack();
+
+	}
+	public boolean isHasStarted() {
+		return hasStarted;
+	}
+	public void addClient(ClientHandler clientHandler){
+		clients.add(clientHandler);
+		executorService.submit(clientHandler);
 	}
 
+	public boolean canStart(){
+		return clients.size() >= NUMBER_OF_PLAYERS_PER_GAME;
+	}
 	private void playBlackJack() {
 		try {
 			dealFirstRound();

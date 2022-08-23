@@ -5,7 +5,7 @@ import academy.mindswap.game.Player;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientHandler {
+public class ClientHandler implements Runnable{
 
 	private final Socket socket;
 	private PrintWriter writer;
@@ -14,7 +14,7 @@ public class ClientHandler {
 	private Player player;
 
 	private final Server server;
-
+	private boolean readyToStart;
 	public ClientHandler(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
@@ -27,6 +27,9 @@ public class ClientHandler {
 			readUsername();
 			readBudget();
 			askForBet();
+			readyToStart = true;
+
+
 		} catch (IOException e) {
 			try {
 				socket.close();
@@ -34,6 +37,10 @@ public class ClientHandler {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	public boolean isReadyToStart() {
+		return readyToStart;
 	}
 
 	public void welcomeClient() throws IOException {
@@ -110,6 +117,7 @@ public class ClientHandler {
 	}
 
 	public void askForBet() {
+		sendMessageToUser(Messages.CHIPS);
 		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
 		//TODO: create enum for chips
 		while (player.getBudget() < bet) {
@@ -140,5 +148,10 @@ public class ClientHandler {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public void run() {
+		init();
 	}
 }
