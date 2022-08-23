@@ -44,7 +44,11 @@ public class PrintCards {
         System.out.println("(Your total is 20)");
     }
 
-
+    /**
+     * Checks the length of the array of cards on the player hand and adds the cards to the Arraylist
+     * Prints the number of Cards depending on the length of the array
+     * @author Carlos Pinto
+     */
       public void rounds() {
             if (val.length == 2) {
                 this.printCardsInConsole.add(" ___________   ___________");
@@ -103,6 +107,11 @@ public class PrintCards {
 
          }
         }
+    /**
+     *
+     * Prints the first 2 cards from the dealer, one is hidden
+     * @author Carlos Pinto
+     */
       public void dealerHiddenCard(){
         this.printCardsInConsole.add(" ___________   ___________");
         this.printCardsInConsole.add("| " + val1[0] + "         | |###########|");
@@ -176,6 +185,10 @@ public class PrintCards {
     }
 }*/
 
+    /**
+     * Print the arraylist to form a card in ASCII art
+     * @author Carlos Pinto
+     */
     public void printCards(){
         for (String v : printCardsInConsole) {
             System.out.println(v);
