@@ -100,11 +100,11 @@ public class ClientHandler {
 	}
 
 	public void askForBet() {
-		int bet = Integer.parseInt(sendMessageAndReadAnswer("How much do you want to bet?"));
+		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
 		//TODO create enum for chips
 		while (player.getBudget() < bet) {
-			sendMessageToUser("There's not enough money to bet. You have: " + player.getBudget());
-			askForBet();
+			sendMessageToUser(String.format(Messages.NOT_ENOUGH_BUDGET, player.getBudget()));
+			bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
 		}
 		player.setBet(bet);
 	}
