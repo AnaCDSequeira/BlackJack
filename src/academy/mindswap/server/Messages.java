@@ -30,6 +30,11 @@ public class Messages {
     public static final String DEALER_DRAWING_CARD = "Dealer must draw another card. Drawing...";
     public static final String WAITING_FOR_OTHER_PLAYERS = "\nWaiting for other players...";
     public static final String OTHER_PLAYERS_PLAYING = "\nOther players are playing...";
+    public static final String QUIT = "Bye bye! See you next time.";
+    public static final String PLAY_OPTIONS = "What do you want to do?\nhit - ask for another card\nstand - pass your turn\nnew game - start a new game\nquit - abandon game";
+    public static final String INVALID_OPTION = "Invalid option. Choose another one.";
+    public static final String PAYMENT = "\nYour payment is %.2f.";
+    public static final String MONEY_AVAILABLE = "Your current budget is %.2f.";
     public final static String CHIPS = """
                 \u001B[32m    ,######.    \u001B[33m    ,######.    \u001B[34m   ,######.    \u001B[31m   ,######. \u001B[36m      ,######.    \u001B[35m  ,######.
                 \u001B[32m  ,#        #.  \u001B[33m  ,#        #.  \u001B[34m ,#        #.  \u001B[31m ,#        #.  \u001B[36m ,#        #. \u001B[35m ,#        #.

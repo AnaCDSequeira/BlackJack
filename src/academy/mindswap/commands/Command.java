@@ -1,19 +1,24 @@
 package academy.mindswap.commands;
 
+import java.util.Arrays;
+
 public enum Command {
-/*
-    HIT("Hit", new DrawCard()),
-    PASS("Pass", new keepCards()),
-    SPLIT("Split", new splitCards()),
-    DOUBLE("Double", new doubleBet());
+	HIT("/hit", new HitHandler()),
+	STAND("/stand", new StandHandler()),
+	QUIT("/quit", new QuitHandler());
 
+	private String description;
+	private CommandHandler commandHandler;
 
-    private String description;
-    private CommandHandler handler;
+	Command(String description, CommandHandler commandHandler) {
+		this.description = description;
+		this.commandHandler = commandHandler;
+	}
 
-    Command(String description, CommandHandler handler){
-        this.description = description;
-        this.handler= handler;
-    }
-*/
+	public static Command getCommandFromDescription(String description) {
+		return Arrays.stream(values())
+				.filter(command -> command.description.equalsIgnoreCase(description))
+				.findFirst()
+				.orElse(QUIT);
+	}
 }

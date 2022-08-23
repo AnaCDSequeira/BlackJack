@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import static academy.mindswap.server.Server.NUMBER_OF_PLAYERS_PER_GAME;
 
@@ -68,34 +67,43 @@ public class Table implements Runnable {
 	}
 
 	private void playRound() throws InterruptedException {
-		for (ClientHandler client : clients) {
+		clients.forEach(client -> {
 			Player player = client.getPlayer();
 			checkBlackjack(client);
 			do {
 				client.showCards(player);
 				showDealerCard(client);
-				client.askForCards();
+				client.askForNextMove();
 				if (player.wantMoreCards()) {
 					dealCardTo(player);
 					checkPlayer(client);
 				}
 			} while (player.wantMoreCards() && !player.isOutOfGame());
-		}
+		});
+		clients.forEach(client -> client.showCards(dealer));
 		while (dealer.shouldDrawCards()) {
 			dealCardTo(dealer);
-			for (ClientHandler client : clients) {
+			clients.forEach(client -> {
 				client.sendMessageToUser(Messages.DEALER_DRAWING_CARD);
 				client.showCards(dealer);
-			}
+			});
 		}
-		roundCheck();
+		checkResults(clients);
+//		announcePaymentResults(clients);
+	}
+
+	// TODO: Fix concurrency issues
+	private void announcePaymentResults(List<ClientHandler> clients) {
+		clients.forEach(client -> {
+			client.sendMessageToUser(String.format(Messages.PAYMENT, client.getPlayer().getValueWon()));
+			client.sendMessageToUser(String.format(Messages.MONEY_AVAILABLE, client.getPlayer().getBudget()));
+		});
 	}
 
 	private void checkBlackjack(ClientHandler client) {
 		Player player = client.getPlayer();
 		if (player.hasBlackJack()) {
 			client.showCards(player);
-			dealWithBets();
 			player.setIsOutOfGame(true);
 		}
 	}
@@ -108,17 +116,10 @@ public class Table implements Runnable {
 		));
 	}
 
-	private void roundCheck() {
-		for (ClientHandler client : clients) {
-			checkPlayer(client);
-		}
-	}
-
 	private void checkPlayer(ClientHandler client) {
 		Player player = client.getPlayer();
 		if (player.hasBlackJack() || player.hasBusted()) {
 			client.showCards(player);
-			dealWithBets();
 			player.setIsOutOfGame(true);
 		}
 		if (player.hasBlackJack()) {
@@ -127,25 +128,33 @@ public class Table implements Runnable {
 		}
 		if (player.hasBusted()) {
 			client.sendMessageToUser(Messages.BUSTED);
-			return;
 		}
-		if (dealer.hasBusted()) {
-			client.sendMessageToUser(Messages.BUSTED_DEALER);
-			client.sendMessageToUser(Messages.SIMPLE_WIN);
-			return;
-		}
-		if (dealer.getScore() > player.getScore()) {
-			client.sendMessageToUser(Messages.DEALER_WIN);
-		} else if (dealer.getScore() == player.getScore()) {
-			client.sendMessageToUser(Messages.DRAW);
-		} else {
-			client.sendMessageToUser(Messages.SIMPLE_WIN);
-		}
+	}
+
+	private void checkResults(List<ClientHandler> clients) {
+		clients.forEach(client -> {
+			checkPlayer(client);
+			Player player = client.getPlayer();
+			if (dealer.hasBusted()) {
+				client.sendMessageToUser(Messages.BUSTED_DEALER);
+				client.sendMessageToUser(Messages.SIMPLE_WIN);
+				dealWithBets();
+				return;
+			}
+			if (dealer.getScore() > player.getScore()) {
+				client.sendMessageToUser(Messages.DEALER_WIN);
+			} else if (dealer.getScore() == player.getScore()) {
+				client.sendMessageToUser(Messages.DRAW);
+			} else {
+				client.sendMessageToUser(Messages.SIMPLE_WIN);
+			}
+			dealWithBets();
+		});
 	}
 
 	private void dealWithBets() {
 		int dealerScore = dealer.getScore();
-		for (ClientHandler client : clients) {
+		clients.forEach(client -> {
 			Player player = client.getPlayer();
 			double betMultiplier;
 			if (player.hasBlackJack()) {
@@ -155,19 +164,17 @@ public class Table implements Runnable {
 			} else {
 				betMultiplier = 0;
 			}
-			pay(player, betMultiplier);
-		}
+			pay(client, betMultiplier);
+		});
 	}
 
-	private void pay(Player player, double betMultiplier) {
-		player.getPayment(betMultiplier);
+	private void pay(ClientHandler client, double betMultiplier) {
+		client.getPlayer().setPayment(betMultiplier);
 	}
 
 	private void dealFirstRound() {
 		for (int i = 0; i < AMOUNT_OF_INITIAL_CARDS; i++) {
-			for (ClientHandler client : clients) {
-				dealCardTo(client.getPlayer());
-			}
+			clients.forEach(client -> dealCardTo(client.getPlayer()));
 			dealCardTo(dealer);
 		}
 	}

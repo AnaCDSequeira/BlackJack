@@ -6,7 +6,7 @@ import academy.mindswap.game.Player;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
 
 	private final Socket socket;
 	private PrintWriter writer;
@@ -84,6 +84,7 @@ public class ClientHandler implements Runnable{
 
 	public void quit() {
 		try {
+			sendMessageToUser(Messages.QUIT);
 			socket.close();
 		} catch (IOException e) {
 			System.out.println("Couldn't closer player socket");
@@ -97,7 +98,6 @@ public class ClientHandler implements Runnable{
 	public void askForBet() {
 		sendMessageToUser(Messages.CHIPS);
 		int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
-		// TODO: create enum for chips
 		while (player.getBudget() < bet) {
 			sendMessageToUser(String.format(Messages.NOT_ENOUGH_BUDGET, player.getBudget()));
 			bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
@@ -110,23 +110,21 @@ public class ClientHandler implements Runnable{
 		sendMessageToUser(String.format(Messages.SHOW_SCORE, person.getName(), person.getScore()));
 	}
 
-	public void askForCards() {
-		sendMessageToUser("Do you want more cards? Say \"hit\"");
-		String response = readMessageFromUser();
-		while (response == null) {
-			sendMessageToUser("Invalid answer.");
-			response = readMessageFromUser();
+	public void askForNextMove() {
+		sendMessageToUser(Messages.PLAY_OPTIONS);
+		String response = readMessageFromUser().toLowerCase();
+		switch (response) {
+			case "hit" -> player.setWantMoreCards(true);
+			case "stand" -> player.setWantMoreCards(false);
+			case "new game" -> init();
+			case "quit" -> quit();
+			default -> {
+				sendMessageToUser(Messages.INVALID_OPTION);
+				askForNextMove();
+			}
 		}
-		player.setWantMoreCards(response.equals("hit"));
 	}
 
-	public void quitGame() {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 	private void startIOCommunication() {
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);

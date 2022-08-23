@@ -4,7 +4,8 @@ public class Player extends Person {
 
 	private String name;
 	private int bet;
-	private int budget;
+	private double budget;
+	private double valueWon;
 	private boolean wantMoreCards;
 	private boolean outOfGame;
 
@@ -21,9 +22,14 @@ public class Player extends Person {
 		return getHand().hasBlackJack();
 	}
 
-	public void getPayment(double betMultiplier) {
-		budget += bet * betMultiplier;
+	public void setPayment(double betMultiplier) {
+		valueWon = bet * betMultiplier;
+		budget += valueWon;
 		resetBet();
+	}
+
+	public double getValueWon() {
+		return valueWon;
 	}
 
 	private void resetBet() {
@@ -34,7 +40,7 @@ public class Player extends Person {
 		this.name = name;
 	}
 
-	public int getBudget() {
+	public double getBudget() {
 		return budget;
 	}
 
