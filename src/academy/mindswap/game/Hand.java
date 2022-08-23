@@ -45,6 +45,10 @@ public class Hand {
 		return score > BLACKJACK_SCORE;
 	}
 
+	public Card showFirstCard(){
+		return cards.get(0);
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

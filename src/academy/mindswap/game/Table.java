@@ -1,6 +1,7 @@
 package academy.mindswap.game;
 
 import academy.mindswap.server.ClientHandler;
+import academy.mindswap.server.Messages;
 
 import java.util.List;
 
@@ -48,9 +49,11 @@ public class Table implements Runnable {
 		for (ClientHandler client : clients) {
 			Player player = client.getPlayer();
 			client.showCards();
+			client.sendMessageToUser(Messages.SHOW_SCORE + client.getPlayer().getScore() + "\nDealer cards is: " + dealer.firstCard());
 			while (client.wantMoreCards()) {
 				dealCardTo(client.getPlayer());
 				client.sendMessageToUser(client.getPlayer().getHand().toString());
+				client.sendMessageToUser(Messages.SHOW_SCORE + client.getPlayer().getScore());
 				checkPlayer(client);
 				if (player.isOutOfGame()) {
 					break;
@@ -59,7 +62,7 @@ public class Table implements Runnable {
 		}
 		while (dealer.canPlay()) {
 			System.out.println("Estamos no dealer!!");
-//            dealCardTo(dealer);
+			dealCardTo(dealer);
 		}
 		roundCheck();
 	}
@@ -74,7 +77,7 @@ public class Table implements Runnable {
 		Player player = client.getPlayer();
 		if (player.hasBlackJack() || player.hasBusted()) {
 			dealWithBets();
-			client.sendMessageToUser("Foste!");
+			client.sendMessageToUser(Messages.GAME_OVER);
 			player.setIsOutOfGame(true);
 		}
 	}
