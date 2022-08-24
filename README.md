@@ -2,7 +2,8 @@
 
 This BlackJack game was created by Ana Sequeira, Carlos Pinto e Ivan Moreira as part of a group project of MindSwap bootCamp. 
 
-The game consists on playing your hand agains the dealer hand. the one who doenst burst and has more points then the other wins!
+The game consists on playing your hand agains the dealer hand. 
+Who doens't burst and has more points then the other wins!
 
 Game Rules:
 
@@ -26,6 +27,10 @@ During the game:
      After the dealer hand up the cards, you can pick "Hit" or "Stand".
      
     - Hit:
-      The dealer gives you a new card from the shoe.
-    - Stand :
-      You keep your hand and the turn goes to other player or to the dealer.
+        The dealer gives you a new card from the shoe.
+    - Stand:
+        You keep your hand and the turn goes to other player or to the dealer.
+    - Help: 
+        Gives information to the user about the commands he can use.
+    - Quit: 
+        Closes the game.
