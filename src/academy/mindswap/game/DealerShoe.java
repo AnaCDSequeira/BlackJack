@@ -22,8 +22,18 @@ public class DealerShoe {
 		}
 		shuffleCards();
 	}
+
+	/**
+	 * Method to shuffle the cards from the arraylist shoe
+	 */
+
+	private void shuffleCards() {
+		Collections.shuffle(shoe);
+	}
+
 	/**
 	 * Method to get a card returned by other method (drawCardFromTop())
+	 *
 	 * @return the last card from the shuffled shoe
 	 */
 
@@ -31,12 +41,9 @@ public class DealerShoe {
 		return drawCardFromTop();
 	}
 
-	private void shuffleCards() {
-		Collections.shuffle(shoe);
-	}
-
 	/**
 	 * Method to get the last card from the list shoe, remove it and return it
+	 *
 	 * @return the last card from the shuffled shoe
 	 */
 	private Card drawCardFromTop() {
@@ -46,9 +53,21 @@ public class DealerShoe {
 		return card;
 	}
 
+	/**
+	 * Method removes the card from the shoe after is added to the array
+	 *
+	 * @param card
+	 */
+
 	private void removeCard(Card card) {
 		shoe.remove(card);
 	}
+
+	/**
+	 * Method gets the size of the shoe
+	 *
+	 * @return
+	 */
 
 	private int getLastCardPosition() {
 		return shoe.size() - 1;

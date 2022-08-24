@@ -5,20 +5,31 @@ package academy.mindswap.game;
  */
 public class Card {
 
-	private final CardValue cardValue;
-	private final CardSuit cardSuit;
+    private final CardValue cardValue;
+    private final CardSuit cardSuit;
 
-	public Card(CardValue value, CardSuit suit) {
-		cardValue = value;
-		cardSuit = suit;
-	}
+    /**
+     * Constructor
+     *
+     * @param value
+     * @param suit
+     */
 
-	@Override
-	public String toString() {
-		return  cardValue + " of " + cardSuit;
-	}
+    public Card(CardValue value, CardSuit suit) {
+        cardValue = value;
+        cardSuit = suit;
+    }
 
-	public String getValue() {
-		return String.valueOf(cardValue.getValue());
-	}
+    /**
+     * Adds together the card value and the suit
+     */
+
+    @Override
+    public String toString() {
+        return cardValue + " of " + cardSuit;
+    }
+
+    public String getValue() {
+        return String.valueOf(cardValue.getValue());
+    }
 }

@@ -167,7 +167,7 @@ public class ClientHandler implements Runnable {
                 sendMessageToUser(Messages.BJ_RULES);
                 askForNextMove();
             }
-            case "new game" -> init();
+            //case "new game" -> init();
             case "quit" -> quit();
             default -> {
                 sendMessageToUser(Messages.INVALID_OPTION);

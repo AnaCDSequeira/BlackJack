@@ -5,13 +5,16 @@ package academy.mindswap.game;
  */
 
 public enum CardSuit {
-	DIAMONDS,
-	SPADES,
-	HEARTS,
-	CLUBS;
+    DIAMONDS,
+    SPADES,
+    HEARTS,
+    CLUBS;
 
-	@Override
-	public String toString() {
-		return name().charAt(0) + name().substring(1).toLowerCase();
-	}
+    /**
+     * Transform the enum value in to a String and after the 2nd letter to lower case.
+     */
+    @Override
+    public String toString() {
+        return name().charAt(0) + name().substring(1).toLowerCase();
+    }
 }
