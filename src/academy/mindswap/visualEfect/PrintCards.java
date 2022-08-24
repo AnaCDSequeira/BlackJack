@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class PrintCards {
     ArrayList<Integer> value;
     ArrayList<String> printCardsInConsole = new ArrayList<>();
-    Card card = new Card();
+    //Card card = new Card();
     private int[] newValue = new int[6];
     private String[] suit = {"Spades","Diamonds","Hearts","Clubs","Clubs"};
 
