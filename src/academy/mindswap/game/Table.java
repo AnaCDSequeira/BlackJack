@@ -18,10 +18,10 @@ public class Table implements Runnable {
     private static final int AMOUNT_OF_INITIAL_CARDS = 2;
     private static final double BLACKJACK_MULTIPLIER = 2.5;  // value to multiply with bet
     private static final double SIMPLE_WIN_MULTIPLIER = 2;  // value to multiply with bet
-
     private final Dealer dealer;
     private final DealerShoe dealerShoe;
     private final List<ClientHandler> clients;
+    Hand hand;
     ExecutorService executorService;
 
     /**
@@ -49,7 +49,7 @@ public class Table implements Runnable {
             } catch (InterruptedException exception) {
                 throw new RuntimeException(exception);
             }
-
+            //hand.resetScore();
             startGame();
         }
 
@@ -218,7 +218,12 @@ public class Table implements Runnable {
                 betMultiplier = 0;
             }
             pay(client, betMultiplier);
+            client.askForBet();
+
         });
+        //hand.resetScore();
+        startGame();
+
     }
 
     /**

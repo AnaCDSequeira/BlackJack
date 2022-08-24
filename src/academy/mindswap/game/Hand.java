@@ -92,6 +92,10 @@ public class Hand {
         return builder.toString();
     }
 
+    public void resetScore() {
+        cards.clear();
+    }
+
     public int getScore() {
         return score;
     }
