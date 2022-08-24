@@ -129,6 +129,7 @@ public class ClientHandler implements Runnable {
      * Method to ask client how much wants to bet on that round , and sets bet
      */
     public void askForBet() {
+
         sendMessageToUser(Messages.CHIPS);
         int bet = Integer.parseInt(sendMessageAndReadAnswer(Messages.BET_AMOUNT));
         while (player.getBudget() < bet) {
@@ -137,6 +138,7 @@ public class ClientHandler implements Runnable {
         }
         player.setBet(bet);
         sendMessageToUser(Messages.OPTIONS);
+        sendMessageToUser(Messages.WAITING_TURN);
     }
 
     /**

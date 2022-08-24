@@ -37,6 +37,7 @@ public class Messages {
     public static final String OTHER_PLAYERS_PLAYING = "\nOther players are playing...";
     public static final String QUIT = "Bye bye! See you next time.";
     public static final String PLAY_OPTIONS = "Do you want to 'Hit' or 'Stand'?";
+    public static final String WAITING_TURN = "\nWait for you turn...";
     public static final String OPTIONS = "\nHere are some commands you can use!\nhit: get the next card\nstand: pass your turn\nhelp: get a brief explanation card\nrules: get full rules\nquit: abandon game";
     public static final String INVALID_OPTION = "Invalid option. Choose another one.";
     public static final String PAYMENT = "\nYour payment is %.2f.";
