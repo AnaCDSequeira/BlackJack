@@ -1,5 +1,8 @@
 package academy.mindswap.game;
 
+/**
+ * Enumerator with all cases of cards value
+ */
 public enum CardValue {
 	ACE(1),
 	TWO(2),
@@ -23,7 +26,7 @@ public enum CardValue {
 
 	@Override
 	public String toString() {
-		return name().toLowerCase();
+		return name().charAt(0) + name().substring(1).toLowerCase();
 	}
 
 	public int getValue() {

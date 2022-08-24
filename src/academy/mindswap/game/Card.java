@@ -1,5 +1,8 @@
 package academy.mindswap.game;
 
+/**
+ * Class that produces a card with a value and a suit
+ */
 public class Card {
 
 	private final CardValue cardValue;

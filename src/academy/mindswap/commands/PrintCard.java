@@ -1,4 +1,4 @@
-package academy.mindswap.visualEfect.commands;
+package academy.mindswap.commands;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,7 +2,7 @@ package academy.mindswap.commands;
 
 import java.util.Arrays;
 
-public enum Commands {
+public enum Command {
 	HIT("/hit", new HitHandler()),
 	STAND("/stand", new StandHandler()),
 	QUIT("/quit", new QuitHandler());
@@ -10,15 +10,15 @@ public enum Commands {
 	private String description;
 	private CommandHandler commandHandler;
 
-	Commands(String description, CommandHandler commandHandler) {
+	Command(String description, CommandHandler commandHandler) {
 		this.description = description;
 		this.commandHandler = commandHandler;
 	}
 
-	public static Commands getCommandFromDescription(String description) {
+	public static Command getCommandFromDescription(String description) {
 		return Arrays.stream(values())
-				.filter(Commands -> Commands.description.equalsIgnoreCase(description))
+				.filter(command -> command.description.equalsIgnoreCase(description))
 				.findFirst()
-				.orElse(QUIT); // TODO: create NoSuchCommand
+				.orElse(QUIT);
 	}
 }

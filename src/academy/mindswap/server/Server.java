@@ -7,24 +7,39 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * Class Server which is the connection with the clients
+ */
 
 public class Server {
 
-	public static final int NUMBER_OF_PLAYERS_PER_GAME = 1;
+	public static final int NUMBER_OF_PLAYERS_PER_GAME = 2;
 	private static final int PORT = 1010;
+
 	private ServerSocket serverSocket;
-	private List<ClientHandler> clients;
+	private List<Table> games;
+	private ExecutorService executorService;
 
 	public static void main(String[] args) {
+
 		Server server = new Server();
 		server.startServer();
 		server.acceptClient();
 	}
 
+	/**
+	 * Starts server with new socket, new pool and new list of games
+	 */
 	private void startServer() {
 		try {
 			serverSocket = new ServerSocket(PORT);
-			clients = new ArrayList<>();
+			executorService = Executors.newCachedThreadPool();
+			games = new ArrayList<>();
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -32,29 +47,31 @@ public class Server {
 		System.out.println(Messages.OPEN_SERVER);
 	}
 
+	/**
+	 * Method to find a game available to be played and accepts a connection from a client to start a game in a threadpool
+	 * Its is called recursively
+	 */
 	private void acceptClient() {
 		try {
+			Table table = games.stream()
+					.filter(t -> !t.canStart())
+					.findFirst().orElse(new Table());
+
+			if (!games.contains(table)) {
+				games.add(table);
+			}
 			Socket socket = serverSocket.accept();
 			ClientHandler clientHandler = new ClientHandler(socket);
-			clients.add(clientHandler);
+			table.addClient(clientHandler);
 
-			clientHandler.run();
-
-			createGame();
+			if (table.canStart()) {
+				executorService.submit(table);
+			}
 
 			acceptClient();
 
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			exception.printStackTrace();
 		}
-	}
-
-	private void createGame() {
-		if (clients.size() < NUMBER_OF_PLAYERS_PER_GAME) {
-			return;
-		}
-
-		Table table = new Table(clients);
-		new Thread(table).start();
 	}
 }

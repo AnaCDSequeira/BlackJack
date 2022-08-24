@@ -3,6 +3,10 @@ package academy.mindswap.server;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Class Client which is the connection with the server
+ */
+
 public class Client {
 
 	public static final String HOST = "localhost";
@@ -10,7 +14,7 @@ public class Client {
 
 	private Socket socket;
 	private BufferedReader consoleReader;
-	private BufferedWriter serverWriter;
+	private PrintWriter serverWriter;
 	private BufferedReader serverReader;
 
 	public static void main(String[] args) {
@@ -19,10 +23,16 @@ public class Client {
 		client.handleServer();
 	}
 
+	/**
+	 * Reader for console
+	 */
 	private void startConsoleReader() {
 		consoleReader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
+	/**
+	 * Method that connects to server with sockets, instantiates the buffers and keeps communication open with server
+	 */
 	private void handleServer() {
 		connectToServer();
 		createServerWriterReader();
@@ -40,20 +50,30 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Method to instantiate buffers
+	 */
 	private void createServerWriterReader() {
 		try {
 			serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			serverWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			serverWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 		} catch (IOException exception) {
 			throw new RuntimeException(exception);
 		}
 	}
+
+	/**
+	 * Method to create a new thread to listen the server
+	 */
 
 	private void listenToServer() {
 		ServerListener serverListener = new ServerListener();
 		new Thread(serverListener).start();
 	}
 
+	/**
+	 * Method to keep running communication with server
+	 */
 	private void communicateWithServer() {
 		try {
 			sendMessageToServer();
@@ -64,13 +84,19 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Method called above
+	 * @throws IOException shows message and connects again to server
+	 */
 	private void sendMessageToServer() throws IOException {
 		String message = readMessageFromServer();
-		serverWriter.write(message);
-		serverWriter.newLine();
-		serverWriter.flush();
+		serverWriter.println(message);
 	}
 
+	/**
+	 * Method to reads messages from server with bufferedReader and returns the message
+	 * @return String message
+	 */
 	private String readMessageFromServer() {
 		String message = null;
 		try {
@@ -82,6 +108,9 @@ public class Client {
 		return message;
 	}
 
+	/**
+	 * Method to close socket and shows message with error
+	 */
 	private void close() {
 		try {
 			socket.close();
@@ -92,7 +121,14 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Inner class that handles the methods to receive messages from the server on a new Thread
+	 */
 	private class ServerListener implements Runnable {
+
+		/**
+		 * Method to receive messages from server and runs recursively
+		 */
 		private void listenToServer() {
 			try {
 				String message = serverReader.readLine();

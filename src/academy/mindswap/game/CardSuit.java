@@ -1,5 +1,9 @@
 package academy.mindswap.game;
 
+/**
+ * Enumerator with all cases of cards suit
+ */
+
 public enum CardSuit {
 	DIAMONDS,
 	SPADES,
@@ -8,7 +12,6 @@ public enum CardSuit {
 
 	@Override
 	public String toString() {
-		return name().toLowerCase();
+		return name().charAt(0) + name().substring(1).toLowerCase();
 	}
-
 }
