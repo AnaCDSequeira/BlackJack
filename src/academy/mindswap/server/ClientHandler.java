@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
 
     private final Socket socket;
-    private final int MINIMUM_VALUE_TO_PLAY = 5;
+    private final int MINIMUM_VALUE_TO_PLAY = 50;
     private PrintWriter writer;
     private BufferedReader reader;
     private Player player;

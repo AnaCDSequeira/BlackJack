@@ -10,7 +10,7 @@ import java.net.Socket;
 public class Client {
 
     public static final String HOST = "localhost";
-    public static final int PORT = 1011;
+    public static final int PORT = 1012;
 
     private Socket socket;
     private BufferedReader consoleReader;

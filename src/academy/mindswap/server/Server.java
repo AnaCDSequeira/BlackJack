@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class Server {
 
     public static final int NUMBER_OF_PLAYERS_PER_GAME = 2;
-    private static final int PORT = 1011;
+    private static final int PORT = 1012;
 
     private ServerSocket serverSocket;
     private List<Table> games;

@@ -16,7 +16,7 @@ public class Messages {
             "       ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝";
     public static final String CHOOSE_USERNAME = "Please choose your username for the game...";
     public static final String WELCOME_USERNAME = "Welcome, %s!\n";
-    public static final String SPENT_AMOUNT = "And how much will you spend? Minimum is 5 euros.";
+    public static final String SPENT_AMOUNT = "And how much will you spend? Minimum is 50 euros.";
     public static final String AMOUNT_STARTED = "\nNice, you'll start with %d euros";
     public static final String ERROR_MESSAGE = "The Casino is closed now";
     public static final String SHOW_CARDS = "\n%s cards are:\n%s";
@@ -36,8 +36,8 @@ public class Messages {
     public static final String WAITING_FOR_OTHER_PLAYERS = "\nWaiting for other players...";
     public static final String OTHER_PLAYERS_PLAYING = "\nOther players are playing...";
     public static final String QUIT = "Bye bye! See you next time.";
-    public static final String PLAY_OPTIONS = "Do you want to 'Hit' or 'Pass'?";
-    public static final String OPTIONS = "Here some commands you can use!\nhit: get the next card\nstand: pass your turn\nhelp: get a brief explanation card\nrules: get full rules\nnew game: start a new game\nquit: abandon game";
+    public static final String PLAY_OPTIONS = "Do you want to 'Hit' or 'Stand'?";
+    public static final String OPTIONS = "\nHere are some commands you can use!\nhit: get the next card\nstand: pass your turn\nhelp: get a brief explanation card\nrules: get full rules\nquit: abandon game";
     public static final String INVALID_OPTION = "Invalid option. Choose another one.";
     public static final String PAYMENT = "\nYour payment is %.2f.";
     public static final String MONEY_AVAILABLE = "Your current budget is %.2f.";
