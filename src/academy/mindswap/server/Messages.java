@@ -20,7 +20,7 @@ public class Messages {
     public static final String AMOUNT_STARTED = "\nNice, you'll start with %d euros";
     public static final String ERROR_MESSAGE = "The Casino is closed now";
     public static final String SHOW_CARDS = "\n%s cards are:\n%s";
-    public static final String SHOW_SCORE = "\u001B[32m%s current score is: %d \u001B[0m\n";
+    public static final String SHOW_SCORE = "\u001B[32m%s current score is:\u001B[0m %d \u001B[0m\n";
     public static final String SHOW_DEALER_FIRST_CARD = "Dealer's first card:\n%s - %s points\n";
     public static final String BUSTED = "You just busted! The game is over for you.";
     public static final String BUSTED_DEALER = "Dealer just busted!\n";
@@ -38,7 +38,7 @@ public class Messages {
     public static final String QUIT = "Bye bye! See you next time.";
     public static final String PLAY_OPTIONS = "Do you want to 'Hit' or 'Stand'?";
     public static final String WAITING_TURN = "\nWait for you turn...";
-    public static final String OPTIONS = "\nHere are some commands you can use!\nhit: get the next card\nstand: pass your turn\nhelp: get a brief explanation card\nrules: get full rules\nquit: abandon game";
+    public static final String OPTIONS = "\nHere are some commands you can use!\n\u001B[34mhit:\u001B[0m get the next card\n\u001B[34mstand: \u001B[0mpass your turn\n\u001B[34mhelp:\u001B[0m get a brief explanation card\n\u001B[34mrules: \u001B[0mget full rules\n\u001B[34mquit: \u001B[0mabandon game";
     public static final String INVALID_OPTION = "Invalid option. Choose another one.";
     public static final String PAYMENT = "\nYour payment is %.2f.";
     public static final String MONEY_AVAILABLE = "Your current budget is %.2f.";
