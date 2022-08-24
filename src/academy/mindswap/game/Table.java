@@ -183,15 +183,15 @@ public class Table implements Runnable {
         clients.forEach(client -> {
             checkPlayer(client);
             Player player = client.getPlayer();
-            if (dealer.hasBusted()) {
+            if (dealer.hasBusted() && !player.hasBusted()) {
                 client.sendMessageToUser(Messages.BUSTED_DEALER);
                 client.sendMessageToUser(Messages.SIMPLE_WIN);
                 dealWithBets();
                 return;
             }
-            if (dealer.getScore() > player.getScore()) {
+            if (dealer.getScore() > player.getScore() || player.hasBusted()) {
                 client.sendMessageToUser(Messages.DEALER_WIN);
-            } else if (dealer.getScore() == player.getScore()) {
+            } else if (dealer.getScore() == player.getScore() && !player.hasBusted()) {
                 client.sendMessageToUser(Messages.DRAW);
             } else {
                 client.sendMessageToUser(Messages.SIMPLE_WIN);

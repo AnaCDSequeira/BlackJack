@@ -20,7 +20,7 @@ public class Messages {
     public static final String AMOUNT_STARTED = "\nNice, you'll start with %d euros";
     public static final String ERROR_MESSAGE = "The Casino is closed now";
     public static final String SHOW_CARDS = "\n%s cards are:\n%s";
-    public static final String SHOW_SCORE = "%s current score is: %d\n";
+    public static final String SHOW_SCORE = "\u001B[32m%s current score is: %d \u001B[0m\n";
     public static final String SHOW_DEALER_FIRST_CARD = "Dealer's first card:\n%s - %s points\n";
     public static final String BUSTED = "You just busted! The game is over for you.";
     public static final String BUSTED_DEALER = "Dealer just busted!\n";
