@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/108729772/186379077-5c00ab66-253f-4d4b-90b2-779b3cb39f6c.png)
+![image](https://user-images.githubusercontent.com/108729772/186383709-f96e0d04-e99e-44ba-ada1-c27b9fb7f3ce.png)
 
 This BlackJack game was created by Ana Sequeira, Carlos Pinto e Ivan Moreira as part of a group project of MindSwap bootCamp. 
 
